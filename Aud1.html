@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Aud1</title>
+</head>
+<body>
+
+<script>
+    //alert("Vnesete validen broj: ")
+
+    //let text = prompt("Vnesete validen broj: ");
+
+    //let answer = confirm("Are you sure you want to delete this item?");
+
+    //1
+
+    // let num1 = parseInt(prompt("Vnesete prv broj: "));
+    // let num2 = parseInt(prompt("Vnesete vtor broj: "));
+    //
+    // if (isNaN(num1) || isNaN(num2)) {
+    //     document.write("Vnesovte nevaliden broj");
+    // } else {
+    //     if (num1 > num2) {
+    //         document.write(`${num1} e pogolem od ${num2}`);
+    //     } else if (num1 < num2) {
+    //         document.write(`${num2} e pogolem od ${num1}`);
+    //     } else {
+    //         document.write("Broevite se ednakvi");
+    //     }
+    // }
+
+
+    //2
+
+
+    // let year = parseInt(prompt("Vnesete validen broj: "));
+    //
+    // if (!isNaN(year)) {
+    //     if ((year % 4 == 0 && year % 100 != 100) || year % 400 == 0) {
+    //         document.write("Godinata e prestapna");
+    //     } else {
+    //         document.write("Godinata ne e prestapna");
+    //     }
+    // } else {
+    //     document.write("Vnesovte nevaliden broj! Vnesete validen broj!");
+    // }
+
+    //3
+
+    // let x = parseInt(prompt("Vnesete x koordinata: "));
+    // let y = parseInt(prompt("Vnesete y koordinata: "));
+    //
+    // if (!isNaN(x) && !isNaN(y)) {
+    //     // if (x > 0 && y > 0) {
+    //     //     document.write("I kvadrant");
+    //     // } else if (x < 0 && y > 0) {
+    //     //     document.write("II kvadrant");
+    //     // } else if (x < 0 && y < 0) {
+    //     //     document.write("III kvadrant");
+    //     // } else if (x > 0 && y < 0) {
+    //     //     document.write("IV kvadrant");
+    //     // } else if (x == 0 && y == 0) {
+    //     //     document.write("Pocetok");
+    //     // } else if (x == 0 && y != 0) {
+    //     //     document.write("Y oska");
+    //     // } else if (x != 0 && y == 0) {
+    //     //     document.write("X oska");
+    //     // }
+    //
+    //     if (x>0){
+    //         if (y>0)
+    //             document.write("I kvadrant");
+    //         else if (y<0)
+    //             document.write("IV kvadrant");
+    //         else
+    //             document.write("Positivna X oska");
+    //     }else if (x<0){
+    //         if (y>0)
+    //             document.write("II kvadrant");
+    //         else if (y<0)
+    //             document.write("III kvadrant");
+    //         else
+    //             document.write("Negativna X oska");
+    //     }
+    //     else {
+    //         if (y>0)
+    //             document.write("Pozitivna Y oska");
+    //         else if (y<0)
+    //             document.write("Negativna Y oska");
+    //         else
+    //             document.write("Pocetok");
+    //     }
+    // } else {
+    //     document.write("Vnesete vladini broevi");
+    // }
+
+    //4
+
+    let ocena = prompt("Vnesete ocena: ");
+
+    if (isNaN(ocena)) {
+        document.write("Vnesete validna ocena")
+    } else {
+        if (ocena > 0 && ocena <= 50) {
+            document.write("5")
+        } else if (ocena > 50 && ocena <= 60) {
+            document.write("6")
+        } else if (ocena > 60 && ocena <= 70) {
+            document.write("7")
+        } else if (ocena > 70 && ocena <= 80) {
+            document.write("8")
+        } else if (ocena > 80 && ocena <= 90) {
+            document.write("9")
+        } else if (ocena > 90 && ocena <= 100) {
+            document.write("10")
+        } else {
+            document.write("Vnesete validna ocena")
+        }
+    }
+
+
+</script>
+
+</body>
+</html>

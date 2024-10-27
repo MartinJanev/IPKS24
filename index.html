@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta viewport="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<h1>Prva stranica</h1>
+<script>
+    document.writeln('Hello World');
+    //alert("IPKS Lekcija2")
+
+    //let name = prompt('Vnesi ime: ', 'babaje') // returns the input value
+
+    //document.writelnlnln(`Hello ${name}`);
+
+    //let option = confirm('Are you sure?'); // returns true or false
+
+    Boolean(1);//true
+    Boolean(0);//false
+    Boolean(-1);//true
+
+    Boolean(null);//false
+    Boolean(undefined);//false
+
+    Boolean('');//false
+    Boolean(' ');//true
+
+    document.writeln(2 ** 3); // 2^3 = 8
+
+    1 > 2 ? document.write('True') : document.write('False'); // ternary operator - if true, print True, else print False
+
+    document.writeln(2 == '2'); // true
+    document.writeln(2 === '2'); // false
+
+    let result = a ?? b; // if a is not null or undefined, result = a, else result = b
+    let pipe = a || b; // if a is able to be parsed to true / false, result = a, else result = b
+
+    let a = 10;
+    switch (a) {
+        case 1:
+            console.log('1');
+            break;
+        case 2:
+            console.log('2');
+            break;
+        case 10:
+            console.log('10');
+            break;
+        default:
+            console.log('Default');
+            break;
+    }
+
+    let str1 = 'Hello';
+    let str2 = "World";
+    let str3 = `VKN`;
+
+    str3 = 'IP ${str1} ${str2}';
+
+    alert(1 + parseInt("               1                            "))
+
+
+    //null - empty unknown value, explicitly assigned. More used in objects
+    //undefined - unassigned value, default value of variables
+
+    //object -
+    //symbols - used for identifiers for objects
+    //typeof operator - returns a string indicating the type of the unevaluated operand
+
+
+    // == checks operands for equality, but it does not check the type of operands
+    // === checks operands for equality, and it checks the type of operands
+
+
+</script>
+
+<h1>Hello World</h1>
+</body>
+</html>
