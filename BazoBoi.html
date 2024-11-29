@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #top{
+            padding-inline: 200px;
+            display: flex;
+            .Create, .edit{
+                width: 50%;
+            }
+            button{
+                margin-top: 20px;
+                font-size: 15px;
+
+            }
+        }
+        #bottom{
+            padding-top: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: row;
+            gap: 3px;
+            .card{
+                align-items: center;
+                justify-content: center;
+                font-weight: bold;
+                text-align: center;
+                border: 5px solid black;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div id="main">
+    <div id="top">
+            <span class="Create">
+                <div>
+                    <label>Name:</label><input type="text" id="FirstName" name="FNAME" a>
+                </div>
+                <div>
+                    <label>Surname:</label><input type="text" id="SurName" name="SURNAME">
+                </div>
+                <div>
+                    <label>Color:</label><input type="text" id="Color" name="COLOR">
+                </div>
+                <button onclick="submit()">Submit</button>
+            </span>
+        <span class="edit">
+                <div>
+                    <label>Code:</label><input type="text" id="Code" name="CODE" onblur="setRGB()">
+                </div>
+                <div>
+                    <label>Red:</label><input type="number" id="Red" name="RED" min="0" max="255">
+                </div>
+                <div>
+                    <label>Green:</label><input type="number" id="Green" name="GREEN" min="0" max="255">
+                </div>
+                <div>
+                    <label>Blue:</label><input type="number" id="Blue" name="BLUE" min="0" max="255">
+                </div>
+                <button onclick="edit()">Edit</button>
+            </span>
+    </div>
+    <div id="bottom">
+
+    </div>
+
+</div>
+
+<script>
+    var counter = 0;
+    function submit(){
+        var Name = document.getElementById("FirstName").value;
+        var Surname = document.getElementById("SurName").value;
+        var Color = document.getElementById("Color").value;
+        var bottom = document.getElementById("bottom");
+        var card = document.createElement("div");
+
+        var ID = Name[0] + Surname[0] + counter;
+        counter++;
+
+        card.id = ID;
+        card.classList = "card";
+        card.style.background = Color;
+        card.style.width = "19%";
+        card.style.height = "250px";
+        card.innerHTML += "<p>" + Name + " " + Surname + "</p>" + "<p>" + ID + "</p>"
+        bottom.appendChild(card)
+    }
+
+
+    function setRGB(){
+        var Code = document.getElementById("Code").value;
+        var Red = document.getElementById("Red");
+        var Green = document.getElementById("Green");
+        var Blue = document.getElementById("Blue");
+
+        var test = document.getElementById(Code);
+        if(test != null){
+            const BackgroundColor = window.getComputedStyle(test).backgroundColor;
+            const match = BackgroundColor.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+            if (match) {
+                Red.value = parseInt(match[1], 10); // Red value
+                Green.value = parseInt(match[2], 10);// Green value
+                Blue.value = parseInt(match[3], 10);  // Blue value
+            }
+        }
+
+    }
+
+    function edit() {
+        var Code = document.getElementById("Code").value;
+        var Red = document.getElementById("Red").value;
+        var Green = document.getElementById("Green").value;
+        var Blue = document.getElementById("Blue").value;
+
+        var card = document.getElementById(Code);
+        if (card) {
+            if(Red < 0 || Red >255 || Green < 0 || Green >255 || Blue < 0 || Blue >255){
+                alert("rgb value is below 0, or passes the 255 value")
+            }else {
+                var color = `rgb(${Red}, ${Green}, ${Blue})`;
+                card.style.backgroundColor = color;
+            }
+        } else {
+            console.error("Card with ID " + Code + " not found.");
+        }
+    }
+</script>
+</body>
+</html>

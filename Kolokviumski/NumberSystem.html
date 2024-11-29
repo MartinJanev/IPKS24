@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script>
+        function shiftLeft() {
+            let data = document.getElementById("inputField").value;
+            let dataArr = data.split("");
+            let temp = dataArr[0];
+            for (let i = 0; i < dataArr.length - 1; i++) {
+                dataArr[i] = dataArr[i + 1];
+            }
+            dataArr[dataArr.length - 1] = temp;
+            document.getElementById("inputField").value = dataArr.join("");
+        }
+
+        function shiftRight() {
+            let data = document.getElementById("inputField").value;
+            let dataArr = data.split("");
+            let temp = dataArr[dataArr.length - 1];
+            for (let i = dataArr.length - 1; i > 0; i--) {
+                dataArr[i] = dataArr[i - 1];
+            }
+            dataArr[0] = temp;
+            document.getElementById("inputField").value = dataArr.join("");
+        }
+
+        function flipFunc() {
+            let data = document.getElementById("inputField").value;
+            let dataArr = data.split("");
+            let l = 0, r = dataArr.length - 1;
+            while (l < r) {
+                let temp = dataArr[l];
+                dataArr[l] = dataArr[r];
+                dataArr[r] = temp;
+                l++;
+                r--;
+            }
+            document.getElementById("inputField").value = dataArr.join("");
+        }
+
+        function perfectCheck() {
+            //if the number has 2 consecutive even numbers
+            let data = document.getElementById("inputField").value;
+            let dataArr = data.split("");
+            let flag = false;
+            for (let i = 0; i < dataArr.length - 1; i++) {
+                if (dataArr[i] % 2 === 0 && dataArr[i + 1] % 2 === 0) {
+                    flag = true;
+                    break;
+                }
+            }
+            if (flag) {
+                document.getElementById('perfectGenerator').innerHTML = "Perfect";
+                setTimeout(function () {
+                    document.getElementById('perfectGenerator').innerHTML = "";
+                }, 1000);
+            }
+        }
+
+        function storeFunc() {
+            let data = document.getElementById("inputField").value;
+            let listItem = document.createElement("li");
+            listItem.innerHTML = data;
+            document.querySelector("ul").appendChild(listItem);
+        }
+
+
+    </script>
+
+
+</head>
+<body>
+
+<div class="field">
+    <label for="inputField"></label><input id="inputField">
+    <button onclick="shiftLeft()"><</button>
+    <button onclick="shiftRight()">></button>
+    <button onclick="flipFunc()">FLIP</button>
+    <button onclick="storeFunc()">STORE</button>
+    <button onclick="perfectCheck()">CHECK</button>
+</div>
+<p id="perfectGenerator"></p>
+<ul></ul>
+</body>
+</html>

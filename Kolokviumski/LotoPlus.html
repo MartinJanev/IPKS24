@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lotarija</title>
+    <style>
+        #forma, #luckyNums {
+            display: inline-block;
+            width: 300px;
+            vertical-align: top;
+        }
+
+        #cards > div {
+            display: inline-block;
+            border: 1px solid black;
+            width: 400px;
+        }
+
+        .krug {
+            display: inline-block;
+            border: 1px solid black;
+            border-radius: 100%;
+            padding: 5px;
+            margin-right: 10px;
+        }
+    </style>
+    <script>
+
+        let numbCards = 0;
+
+
+        function submit() {
+            let name = document.getElementById('name').value.trim();
+            let amount = parseInt(document.getElementById('amount').value);
+            let code = document.getElementById('code').value;
+            let combination = document.getElementById('combination').value;
+            combination = combination.split(',');
+            let bonus = document.getElementById('bonus').value;
+
+            console.log(name, amount, code, combination, bonus);
+
+            if (!name || !amount || !code || !combination) {
+                alert('Please fill all fields');
+                return;
+            }
+            let proverka = document.getElementById(code);
+            if (proverka !== null) {
+                alert('Code already exists');
+                return;
+            }
+
+            for (let i = 0; i < 10; i++) {
+                if (code.indexOf(i) !== -1) {
+                    alert('Code must not contain numbers');
+                    return;
+                }
+            }
+            if (code.indexOf('!') !== -1 || code.indexOf('%') !== -1) {
+                alert('Code must contain !');
+                return;
+            }
+
+            var combinationStr = "";
+            for (let i = 0; i < 7; i++) {
+                combinationStr += "<p class='krug'>" + combination[i] + "</p>"
+            }
+            var newCard = "<div class='karticka' title='" + bonus + "' id='" + code + "'>" +
+                "<p>Name: " + name + "</p>" +
+                "<p>Code: " + code + "</p>" +
+                "<div>Combination: " + combinationStr + "</div>" +
+                "<p class='amount'>Initial Amount: " + amount + "</p>" +
+                "<p>Total win: <span class='win'></span></p></div>"
+
+            var cards = document.getElementById("cards")
+            cards.innerHTML += newCard;
+            numbCards += 1;
+        }
+
+        function generateLuckyNums() {
+            if (numbCards < 5) {
+                return;
+            }
+            let winningCombo = document.getElementById("win_combo")
+            for (let i = 0; i < 7; i++) {
+                var broj = parseInt(Math.random() * 31 + 1);
+                var exists = document.getElementById(broj.toString());
+                if (exists != null) {
+                    i--;
+                    continue;
+                }
+                winningCombo.innerHTML += "<p class='krug' id='" + broj + "'>" + broj + "</p>";
+            }
+            checkCombinations()
+        }
+
+        function checkCombinations() {
+            var wincombo = document.getElementById("win_combo").getElementsByClassName("krug")
+            var cards = document.getElementById("cards").getElementsByClassName("karticka")
+            for (let i = 0; i < cards.length; i++) {
+                var dobitni = 0
+                var cardcombination = cards[i].getElementsByClassName("krug")
+                for (let j = 0; j < 7; j++) {
+                    for (let k = 0; k < 7; k++) {
+                        if (cardcombination[j].innerHTML === wincombo[k].innerHTML) {
+                            dobitni += 1;
+                        }
+                    }
+                }
+                if (dobitni <= 3) {
+                    cards[i].style.backgroundColor = "yellow";
+                } else if (dobitni <= 5) {
+                    cards[i].style.backgroundColor = "blue";
+                } else {
+                    cards[i].style.backgroundColor = "green";
+                }
+                var bonus = cards[i].getAttribute("title");
+                var zarabotka = dobitni * 30 + cards[i]
+                if (bonus === "Yes") {
+                    zarabotka += 500;
+                }
+
+                var uplata = cards[i].getElementsByClassName("amount")[0].innerHTML.split(":")[1];
+                zarabotka += parseInt(uplata);
+                cards[i].getElementsByClassName("win")[0].innerHTML = zarabotka;
+                cards[i].innerHTML += "<button onclick='remove(this)'>Sold</button>"
+            }
+        }
+
+        function remove(obj) {
+            obj.parentNode.remove();
+
+        }
+    </script>
+
+</head>
+<body>
+<h1>National Lottery Game</h1>
+
+<div id="forma">
+    <h2>Form</h2>
+    <div>
+        Name: <input type="text" id="name">
+    </div>
+    <div>
+        Amount <input type="number" id="amount">
+    </div>
+    <div>
+        Code: <input type="text" id="code">
+    </div>
+    <div>
+        Combination: <input type="text" id="combination">
+    </div>
+    <div>
+        Bonus <select id="bonus">
+        <option>Yes</option>
+        <option>No</option>
+    </select>
+    </div>
+
+    <button onclick="submit()">Add</button>
+</div>
+<div id="luckyNums">
+    <h2>Lucky Numbers</h2>
+    <div id="win_combo"></div>
+    <button onclick="generateLuckyNums()">Get weekly combination</button>
+    <p>Total: <span id="totalWin"></span></p>
+</div>
+
+<div id="cards"></div>
+</body>
+</html>

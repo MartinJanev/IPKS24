@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lab1.2</title>
+
+    <script>
+        var mobile = prompt();
+
+        let a = mobile.substring(0, 3);
+        let b = mobile.substring(3, 6);
+        let c = mobile.substring(6, 9);
+
+        let operator = mobile.substring(0, 3);
+
+        document.write(a + "/" + b + "-" + c+"<br>");
+
+        if (operator === "070" || operator === "071" || operator === "072") {
+            document.write("T-Mobile");
+        } else if (operator === "077" || operator === "078") {
+            document.write("A1");
+        } else if (operator === "075" || operator === "076") {
+            document.write("One");
+        }
+        else {
+            document.write("Unknown");
+        }
+    </script>
+
+</head>
+<body>
+
+</body>
+</html>

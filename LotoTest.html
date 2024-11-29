@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <style>
+
+        .karta {
+            border: 1px solid black;
+            display: inline-block;
+            margin: 10px;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .krug {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            text-align: center;
+            line-height: 20px;
+            border: 1px solid black;
+            border-radius: 50%;
+            margin: 5px;
+            padding: 5px;
+        }
+
+        #field div {
+            display: inline-block;
+            width: 500px;
+            vertical-align: top;
+        }
+
+        #assign > div {
+            display: inline-block;
+            margin: 5px 0;
+        }
+
+        #assign label {
+            display: inline-block;
+            width: 200px;
+        }
+
+        #assign button {
+            margin-top: 5px;
+            width: 50px;
+        }
+    </style>
+
+    <script>
+
+        class Ticket {
+            constructor(name, amount, code, combinations, bonus) {
+                this.name = name;
+                this.amount = amount;
+                this.code = code;
+                this.combinations = combinations;
+                this.bonus = bonus;
+                this.totalWin = 0;
+            }
+
+            createTicket() {
+                let combinationStr = this.combinations.map(num => `<p class="krug">${num}</p>`)
+                combinationStr.join("")
+
+                let karticka = document.createElement("div");
+                karticka.className = "karta";
+                karticka.id = this.code;
+                karticka.title = this.bonus
+                karticka.innerHTML = `
+                <p>Name: ${this.name}</p>
+                <p>Code: ${this.code}</p>
+                <div>Combination: ${combinationStr}</div>
+                <p class="amount">Amount: ${this.amount}</p>
+                <p>Total win: <span class='win'>${this.totalWin}</span></p>
+                `;
+
+
+                return karticka;
+            }
+        }
+
+        class Lottery {
+            constructor() {
+                this.cards = [];
+                this.numCards = 0;
+                this.winningNumbers = [];
+            }
+
+            addTicket(ticket) {
+                if (this.cards.some(existing => existing.code === ticket.code)) {
+                    alert("Кодот веќе постои")
+                    return;
+                }
+                for (let i = 0; i < 10; i++) {
+                    if (ticket.code.indexOf(i) !== -1) {
+                        alert('Кодот не треба да содржи броеви');
+                        return;
+                    }
+                }
+                if (ticket.code.indexOf('!') !== -1 || ticket.code.indexOf('%') !== -1) {
+                    alert('Кодот не смее да содржи ! или %');
+                    return;
+                }
+
+                this.cards.push(ticket)
+                this.numCards++;
+                document.getElementById("cards").appendChild(ticket.createTicket())
+            }
+
+            generateWeeklyNumbers() {
+                // if (this.numCards < 2) {
+                //     return;
+                // }
+                let winningCombination = document.getElementById("luckyNumbers")
+                winningCombination.innerHTML = "";
+                this.winningNumbers = []
+
+                while (this.winningNumbers.length < 7) {
+                    let randomNum = Math.floor(Math.random() * 31) + 1
+                    if (!this.winningNumbers.includes(randomNum)) {
+                        this.winningNumbers.push(randomNum)
+                        let numElement = document.createElement("p")
+                        numElement.id = randomNum;
+                        numElement.style.backgroundColor = `rgb(${Math.floor(Math.random() * 256)},${Math.floor(Math.random() * 256)},${Math.floor(Math.random() * 256)})`
+                        numElement.className = "krug"
+                        numElement.textContent = randomNum
+                        winningCombination.appendChild(numElement)
+                    }
+                }
+
+                this.checkCombinations()
+            }
+
+            checkCombinations() {
+                let totalWinSpan = document.getElementById("winSuma")
+                let totalMoney = 0;
+
+
+                this.cards.forEach(karticka => {
+                    let matches = karticka.combinations.filter(num => {
+                        this.winningNumbers.includes(parseInt(num))
+                    }).length;
+
+                    const cardElement = document.getElementById(karticka.code);
+
+                    if (matches <= 3) {
+                        cardElement.style.backgroundColor = "yellow";
+                        cardElement.style.color = "black";
+                    } else if (matches <= 5) {
+                        cardElement.style.backgroundColor = "blue";
+                        cardElement.style.color = "white";
+                    } else {
+                        cardElement.style.backgroundColor = "green";
+                        cardElement.style.color = "white";
+                    }
+
+
+                    let zarabotka = matches * 30 + karticka.amount;
+                    if (karticka.button === "Yes") {
+                        zarabotka += 500;
+                    }
+
+                    totalMoney += zarabotka;
+                    cardElement.querySelector(".win").textContent = zarabotka;
+
+                    const removeButton = document.createElement("button")
+                    removeButton.textContent = "Pay"
+                    removeButton.onclick = () => deleteTicket(cardElement, karticka)
+                    cardElement.appendChild(removeButton)
+
+                    function deleteTicket(cardElement, karta) {
+                        let totalWin = parseInt(document.getElementById("winSuma").textContent);
+                        totalWin -= parseInt(cardElement.querySelector(".win").textContent);
+                        document.getElementById("totalWin").textContent = totalWin;
+                        cardElement.remove();
+                        const index = game.cards.findIndex(c => c.code === karta.code); // Find and remove the ticket object from the array
+                        if (index > -1) {
+                            game.cards.splice(index, 1);
+                        }
+                    }
+                })
+
+                totalWinSpan.textContent = totalMoney;
+            }
+        }
+
+
+        const game = new Lottery();
+
+        function submitTicket() {
+            let name = document.getElementById("name").value.trim()
+            let amount = parseInt(document.getElementById("amount").value)
+            let code = document.getElementById("code").value.trim();
+            const combo = document.getElementById("combinations").value.split(",").map(num => num.trim());
+            let bonus = document.getElementById("bonus").value;
+
+
+            if (!name || !amount || !code || combo.length !== 7) {
+                alert("Валдини информации ве молам")
+                return;
+            }
+
+            let ticket = new Ticket(name, amount, code, combo, bonus)
+            game.addTicket(ticket)
+        }
+
+        function generateWeeklyNumbers() {
+            game.generateWeeklyNumbers();
+        }
+    </script>
+
+</head>
+<body>
+<h1 style="text-align: center">National Lottery Game</h1>
+<section id="field">
+    <div id="assign">
+        <h2>Assign Form</h2>
+        <div>
+            <label for="name">Name and Surname:</label>
+            <input id="name">
+        </div>
+        <div>
+            <label for="amount">Ticket Amount:</label>
+            <input type="number" id="amount">
+        </div>
+        <div>
+            <label for="code">Code:</label>
+            <input id="code">
+        </div>
+        <div>
+            <label for="combinations">Combination:</label>
+            <input type="text" id="combinations">
+        </div>
+        <div>
+            <label for="bonus">Bonus:</label>
+            <select id="bonus">
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+        </div>
+        <button onclick="submitTicket()">Add</button>
+    </div>
+    <div id="luckyNumebrDiv">
+        <h2>Lucky numbers</h2>
+        <div id="luckyNumbers"></div>
+        <button onclick="generateWeeklyNumbers()">Get weekly numbers</button>
+        <p>Total win: <span id="winSuma"></span></p>
+    </div>
+</section>
+<section id="cards">
+
+</section>
+</body>
+</html>

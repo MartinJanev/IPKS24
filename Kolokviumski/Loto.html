@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>National Lottery Game</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+        section {
+            display: flex;
+            flex-direction: row;
+            margin: 10px 0;
+            column-gap: 50px;
+        }
+
+        section section {
+            display: flex;
+            flex-direction: column;
+        }
+
+        section button {
+            width: 150px;
+        }
+
+        section section div {
+            margin: 5px 0;
+        }
+
+        label {
+            display: inline-block;
+            width: 250px;
+        }
+
+        input, select {
+            width: 250px;
+        }
+
+        #field {
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            display: flex;
+            flex-direction: row;
+        }
+
+        li {
+            border: 1px solid black;
+            padding: 3px;
+            border-radius: 40%;
+            margin: 0 3px;
+        }
+
+        .card {
+            border: 1px solid black;
+            padding: 10px;
+            margin: 10px;
+            width: 300px;
+            display: inline-block;
+        }
+
+        .card p {
+            margin: 0;
+        }
+
+        #lottoNums {
+            width: 30px;
+            height: 30px;
+            text-align: center;
+            line-height: 30px;
+            border-radius: 50%;
+        }
+    </style>
+
+    <script>
+        let score = 0;
+        let activeTickets = 0;
+        let weeklyNumbers = [];
+        let payment = 0;
+
+        function addTicket() {
+            let hits = 0;
+            const name = document.getElementById("name").value.trim();
+            const money = parseFloat(document.getElementById("payment").value);
+            payment = money;
+            const combination = document.getElementById("combination").value.split(",").map(Number);
+            const code = document.getElementById("ticketCode").value.trim();
+            const bonus = document.getElementById("bonus").value;
+            let unclickableButton = document.getElementById("luckyNum");
+
+
+            if (!code || !/^[A-Za-z%!]+$/.test(code)) {
+                alert("Please enter a valid code");
+                return;
+            }
+
+            // Validation
+            if (!name || isNaN(money) || combination.length !== 7 || combination.some(num => num < 1 || num > 31)) {
+                alert("Please enter valid information for all fields.");
+                return;
+            } else {
+                let proverka = document.getElementById(code);
+                if (proverka !== null) {
+                    alert("This ticket already exists");
+                    return;
+                }
+            }
+
+            let ul = document.createElement("ul");
+
+            combination.forEach(num => {
+                let li = document.createElement("li");
+                li.innerText = num;
+                li.id = "lottoNums"
+                ul.appendChild(li);
+            });
+
+            // Add ticket to table
+            let card = document.createElement("div");
+            card.id = code;
+            card.className = "card";
+            card.innerHTML = `
+                <p>Name: ${name}</p>
+                <p>Code: ${code}</p>
+                <p>Combination: ${ul.outerHTML}</p>
+                <p>Bonus: ${bonus}</p>
+                <button onclick="getPaid(this)">Get Paid</button>
+                <p id="hitts" hidden>${hits}</p>
+            `;
+            document.getElementById("field").appendChild(card);
+
+            activeTickets++;
+            if (activeTickets === 1) {
+                unclickableButton.disabled = false;
+            }
+
+        }
+
+        function getPaid(obj) {
+            let hits = parseInt(obj.parentNode.querySelector("#hitts").innerHTML);
+            let bonus = obj.parentNode.querySelector("p:nth-of-type(4)").innerHTML;
+            bonus = bonus.split(": ")[1] === "yes";
+            let res = parseInt((payment ? payment : 0) + hits * 30 + (bonus ? 500 : 0));
+            score += res;
+            showPrice();
+            obj.parentNode.remove();
+
+        }
+
+
+        function generateWeeklyNumbers() {
+            // Generate 7 unique random numbers between 1 and 31
+            weeklyNumbers = [];
+            while (weeklyNumbers.length < 7) {
+                const num = Math.floor(Math.random() * 31) + 1;
+                if (!weeklyNumbers.includes(num)) {
+                    weeklyNumbers.push(num);
+                }
+            }
+            weeklyNumbers.sort((a, b) => a - b);
+
+            let ul = document.createElement("ul");
+
+            weeklyNumbers.forEach(num => {
+                let li = document.createElement("li");
+                li.innerText = num;
+                li.id = "lottoNums"
+                li.style.background = `rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`;
+                ul.appendChild(li);
+            })
+
+            document.getElementById("weeklyNumbers").innerHTML = "Weekly Numbers: " + ul.outerHTML;
+
+            Array.from(document.getElementsByClassName("card")).forEach(card => {
+                card.querySelector("button").style.display = "inline-block";
+                evaluateTickets(card);
+            });
+
+            // Update ticket results
+        }
+
+        function evaluateTickets(obj) {
+            const numbers = Array.from(obj.querySelectorAll("li")).map(li => parseInt(li.innerHTML));
+            const hits = numbers.filter(num => weeklyNumbers.includes(num)).length;
+
+            if (hits <= 3) {
+                obj.style.backgroundColor = "yellow";
+            } else if (hits >= 4 && hits <= 5) {
+                obj.style.backgroundColor = "blue";
+                obj.style.color = "white";
+            } else if (hits >= 6 && hits <= 7) {
+                obj.style.backgroundColor = "green";
+
+            }
+
+            obj.querySelector("#hitts").innerHTML = hits;
+        }
+
+        function showPrice() {
+            document.getElementById("total").innerText = score;
+        }
+    </script>
+</head>
+<body>
+<h1>National Lottery Game</h1>
+
+<section>
+    <section>
+        <h2>Assign Form</h2>
+        <div>
+            <label for="name">Name and Surname:</label>
+            <input type="text" id="name">
+        </div>
+        <div>
+            <label for="ticketCode">Code</label>
+            <input type="text" id="ticketCode">
+        </div>
+        <div>
+            <label for="payment">Payment:</label>
+            <input type="number" id="payment">
+        </div>
+        <div>
+            <label for="combination">Combination (7 numbers):</label>
+            <input type="text" id="combination" placeholder="e.g., 1,2,3,4,5,6,7">
+        </div>
+        <div>
+            <label for="bonus">Bonus:</label>
+            <select id="bonus">
+                <option value="no">No</option>
+                <option value="yes">Yes</option>
+            </select>
+        </div>
+        <button onclick="addTicket()">Add Ticket</button>
+    </section>
+    <section>
+        <h2>Lucky Numbers</h2>
+        <p id="weeklyNumbers">Weekly Numbers: Not Generated</p>
+        <button id="luckyNum" disabled onclick="generateWeeklyNumbers()">Get Weekly Numbers</button>
+        <p>Total win: <span id="total">0</span></p>
+    </section>
+</section>
+
+
+<section id="field">
+</section>
+</body>
+</html>

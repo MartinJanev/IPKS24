@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Object National Lottery Game</title>
+    <style>
+        section {
+            display: inline-block;
+            vertical-align: top;
+            margin-right: 100px;
+        }
+
+        section > div {
+            margin-bottom: 10px;
+        }
+
+        section > div label {
+            display: inline-block;
+            width: 200px;
+        }
+
+        .karticka {
+            border: 1px solid black;
+            margin: 10px;
+            padding: 10px;
+            display: inline-block;
+            text-align: left;
+        }
+
+        .krug {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            text-align: center;
+            line-height: 30px;
+            border: 1px solid black;
+            border-radius: 50%;
+            margin: 5px;
+            padding: 5px;
+        }
+
+        #win_combo {
+            display: flex;
+            flex-wrap: wrap;
+        }
+    </style>
+</head>
+<body>
+<h1>National Lottery Game</h1>
+
+<section>
+    <h2>Assign Form</h2>
+    <div>
+        <label for="name">Name and Surname:</label>
+        <input type="text" id="name">
+    </div>
+    <div>
+        <label for="code">Code:</label>
+        <input type="text" id="code">
+    </div>
+    <div>
+        <label for="amount">Payment:</label>
+        <input type="number" id="amount">
+    </div>
+    <div>
+        <label for="combination">Combination (7 numbers):</label>
+        <input type="text" id="combination" placeholder="e.g., 1,2,3,4,5,6,7">
+    </div>
+    <div>
+        <label for="bonus">Bonus:</label>
+        <select id="bonus">
+            <option value="No">No</option>
+            <option value="Yes">Yes</option>
+        </select>
+    </div>
+    <button onclick="submit()">Add Ticket</button>
+</section>
+
+<section>
+    <h2>Lucky Numbers</h2>
+    <div id="win_combo">Weekly Numbers: Not Generated</div>
+    <button onclick="generateLuckyNums()">Generate Lucky Numbers</button>
+    <p>Total win: <span id="totalWin">0</span></p>
+</section>
+
+<div>
+    <h2>All Tickets</h2>
+    <div id="cards"></div>
+</div>
+
+<script>
+    class LotteryCard {
+        constructor(name, amount, code, combination, bonus) {
+            this.name = name;
+            this.amount = amount;
+            this.code = code;
+            this.combination = combination;
+            this.bonus = bonus;
+            this.totalWin = 0;
+        }
+
+        createCardElement() {
+            let combinationStr = this.combination.map(num => `<p class='krug'>${num}</p>`)
+            combinationStr.join("");
+
+            const cardDiv = document.createElement("div");
+            cardDiv.className = "karticka";
+            cardDiv.id = this.code;
+            cardDiv.title = this.bonus;
+            cardDiv.innerHTML = `
+            <p>Name: ${this.name}</p>
+            <p>Code: ${this.code}</p>
+            <div>Combination: ${combinationStr}</div>
+            <p class='amount'>Initial Amount: ${this.amount}</p>
+            <p>Total win: <span class='win'>${this.totalWin}</span></p>
+            `;
+
+            const removeButton = document.createElement("button");
+            removeButton.textContent = "Sold";
+            removeButton.onclick = () => cardRemove(cardDiv);
+            cardDiv.appendChild(removeButton);
+
+            function cardRemove(obj) {
+                let totalWin = parseInt(document.getElementById("totalWin").textContent);
+                totalWin -= parseInt(obj.querySelector(".win").textContent);
+                document.getElementById("totalWin").textContent = totalWin;
+                obj.remove();
+
+            }
+
+
+            return cardDiv;
+        }
+
+    }
+
+
+    class LotteryGame {
+        constructor() {
+            this.cards = [];
+            this.numCards = 0;
+            this.winningCombination = [];
+        }
+
+        addCard(card) {
+            if (this.cards.some(existingCard => existingCard.code === card.code)) {
+                alert("Code already exists");
+                return;
+            }
+
+            if (!/^[A-Za-z%!]+$/.test(card.code)) {
+                alert("Code must not contain numbers or '!' or '%'");
+                return;
+            }
+
+            this.cards.push(card);
+            this.numCards++;
+            document.getElementById("cards").appendChild(card.createCardElement());
+        }
+
+        generateLuckyNums() {
+            if (this.numCards < 1) {
+                alert("At least 5 cards are required to generate lucky numbers.");
+                return;
+            }
+
+            const winComboDiv = document.getElementById("win_combo");
+            winComboDiv.innerHTML = "";
+            this.winningCombination = [];
+
+            while (this.winningCombination.length < 7) {
+                const randNum = Math.floor(Math.random() * 31) + 1;
+                if (!this.winningCombination.includes(randNum)) {
+                    this.winningCombination.push(randNum);
+                    const numElement = document.createElement("p");
+                    numElement.className = "krug";
+                    numElement.id = randNum;
+                    numElement.textContent = randNum;
+                    winComboDiv.appendChild(numElement);
+                }
+            }
+
+            this.checkCombinations();
+        }
+
+        checkCombinations() {
+            const totalWinSpan = document.getElementById("totalWin");
+            let totalWin = 0;
+
+            this.cards.forEach(card => {
+                const matches = card.combination.filter(num => {
+                    this.winningCombination.includes(parseInt(num))
+                }).length;
+
+                const cardElement = document.getElementById(card.code);
+
+                if (matches <= 3) {
+                    cardElement.style.backgroundColor = "yellow";
+                    cardElement.style.color = "black";
+                } else if (matches <= 5) {
+                    cardElement.style.backgroundColor = "blue";
+                    cardElement.style.color = "white";
+                } else {
+                    cardElement.style.backgroundColor = "green";
+                    cardElement.style.color = "white";
+                }
+
+                let earnings = matches * 30 + card.amount;
+                if (card.bonus === "Yes") {
+                    earnings += 500;
+                }
+
+                totalWin += earnings;
+                cardElement.querySelector(".win").textContent = earnings;
+            });
+
+            totalWinSpan.textContent = totalWin;
+        }
+
+    }
+
+    const game = new LotteryGame();
+
+    function submit() {
+        const name = document.getElementById("name").value.trim();
+        const amount = parseInt(document.getElementById("amount").value);
+        const code = document.getElementById("code").value.trim();
+        const combination = document.getElementById("combination").value.split(",").map(num => num.trim());
+        const bonus = document.getElementById("bonus").value;
+
+        if (!name || !amount || !code || combination.length !== 7) {
+            alert("Please fill all fields correctly.");
+            return;
+        }
+
+        const card = new LotteryCard(name, amount, code, combination, bonus);
+        game.addCard(card);
+    }
+
+    function generateLuckyNums() {
+        game.generateLuckyNums();
+    }
+</script>
+</body>
+</html>

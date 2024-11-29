@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+
+        th, tr {
+            border: 1px solid black;
+            width: 100px;
+        }
+
+        td {
+            border: 1px solid black;
+        }
+
+        td button {
+            display: flex;
+            justify-content: center;
+            align-self: center;
+        }
+
+        div {
+            margin: 10px 0;
+            display: flex;
+            flex-direction: row;
+            width: 300px;
+        }
+
+        label {
+            width: 100px;
+        }
+
+
+    </style>
+
+    <script>
+        var total = 0;
+
+        function submitProject() {
+            var name = document.getElementById("authorName").value;
+            var project = document.getElementById("projectName").value;
+            var price = document.getElementById("price").value;
+
+            if (name === "" || project === "" || price === "") {
+                alert("Please fill all fields");
+                return;
+            } else {
+                total += parseInt(price);
+                showPrice();
+                var tabela = document.getElementById("tabela");
+                var row = "<tr class='" + price + "'><td>" + name + "</td><td>" + project + "</td><td>" + price + "</td><td><button onclick='remove(this)'>Remove</button></td></tr>"
+                tabela.innerHTML += row;
+            }
+        }
+
+
+        function remove(obj) {
+            // var tabela = document.getElementById("tabela");
+            // var row = tabela.getElementsByTagName("tr");
+            // for (var i = 1; i < row.length; i++) {
+            //     row[i].onclick = function () {
+            //         var r = this.rowIndex;
+            //         tabela.deleteRow(r);
+            //     }
+            // }
+
+            var redica = obj.parentNode.parentNode;
+            var priceRow = redica.classList.value;
+            total -= parseInt(priceRow);
+            showPrice();
+            redica.parentNode.removeChild(redica);
+        }
+
+        function showPrice() {
+            var priceScreen = document.getElementById("total");
+            priceScreen.innerHTML = total;
+        }
+
+
+    </script>
+
+</head>
+<body>
+
+<h1>Project details</h1>
+
+<div>
+    <label for="authorName">Author:</label>
+    <input id="authorName">
+</div>
+<div>
+    <label for="projectName">Project name:</label>
+    <input id="projectName">
+</div>
+<div>
+    <label for="price">Price:</label>
+    <input id="price" type="number">
+</div>
+
+<button onclick="submitProject()">Submit</button>
+<p><strong>Total cost: <span id="total">0</span></strong></p>
+
+<table id="tabela">
+    <tr>
+        <th>Author</th>
+        <th>Project name</th>
+        <th>Price</th>
+        <th>Actions</th>
+    </tr>
+</table>
+
+
+</body>
+</html>

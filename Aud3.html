@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Aud3</title>
+
+    <script>
+        // let cars = ["BMW", "Volvo", "Saab", "Ford", "Fiat", "Audi"];
+        // let fruits = ["Apple", "Orange", "Banana"];
+        //
+        // for (let i = 0; i < cars.length; i++) {
+        //   //console.log(cars[i]);
+        //     document.write(cars[i] + "<br>");
+        // }
+        //
+        // let days = ["Monday","Thursday", "Friday", "Sunday"];
+        // console.log(days);
+        // delete days[2];
+        // console.log(days);
+
+        // function first(arr,n){
+        //     return arr.slice(0,n);
+        // }
+        // console.log(first([],3))
+        // console.log(first([7, 9, 0, -2],3))
+        // console.log(first([7, 9, 0, -2,12,13,21,3213,123],-3))
+        // console.log(first([7, 9, 0, -2],-3))
+
+        // myColor = ["Red", "Green", "White", "Black"];
+        // console.log(myColor.join(","));
+        //
+        // let num = prompt("Enter a number: ");
+        //
+        // let result = []
+        // result.push(num[0]);
+        //
+        // for (let i = 1; i < num.length; i++) {
+        //     if (num[i] % 2 === 0 && num[i - 1] % 2 === 0) {
+        //         result.push("-");
+        //     }
+        //     result.push(num[i]);
+        // }
+        //
+        // console.log(result.join(""));
+
+        // console.log(union([1, 2, 3], [100, 2, 1, 10]));
+        //
+        // function union(arr1, arr2) {
+        //     let result = [];
+        //     for (let i = 0; i < arr1.length; i++) {
+        //        result.push(arr1[i]);
+        //     }
+        //     for (let i = 0; i < arr2.length; i++) {
+        //         if (!result.includes(arr2[i])) {
+        //             result.push(arr2[i]);
+        //         }
+        //     }
+        //     return result.sort((a, b) => a - b);
+        // }
+
+        // console.log(num_str_range('a', "z", 2));
+        // console.log(num_str_range('z', "a", 2));
+        //
+        // function num_str_range(start, end, step) {
+        //     if (typeof start !== typeof end) {
+        //         return;
+        //     }
+        //     if (start > end) {
+        //         step = -step;
+        //     }
+        //
+        //     let result = [];
+        //     if (typeof start == "number") {
+        //         while (step > 0 ? start <= end : start >= end) {
+        //             result.push(start);
+        //             start += step;
+        //         }
+        //     } else if (typeof start == "string") {
+        //         start = start.charCodeAt(0);
+        //         end = end.charCodeAt(0);
+        //
+        //         while (step > 0 ? start <= end : start >= end) {
+        //             result.push(String.fromCharCode(start));
+        //             start += step;
+        //         }
+        //     } else {
+        //         console.log("Invalid input");
+        //         return;
+        //     }
+        //
+        //     return result;
+        // }
+
+
+        let car = {
+            make: "Toyota",
+            model: "Corolla",
+            year: 2000,
+            color: "red",
+            price: 5000,
+            getName: function (){
+                return this.make + " " + this.model;
+            }
+        }
+
+        let washingMachine = {
+            make: "Samsung",
+            model: "X123",
+            year: 2010,
+            color: "white",
+            price: 300
+        }
+
+        let airConditioner = {
+            make: "LG",
+            model: "X123",
+            year: 2010,
+            color: "white",
+            price: 300
+        }
+
+
+        class Car {
+            constructor(make, model, year, color, price) {
+                this.make = make;
+                this.model = model;
+                this.year = year;
+                this.color = color;
+                this.price = price;
+            }
+
+            getName() {
+                return this.make + " " + this.model;
+            }
+        }
+
+        let car1 = new Car("Buggati", "Corolla", 2000, "red", 5000);
+    </script>
+
+</head>
+<body>
+
+</body>
+</html>

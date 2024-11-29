@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script>
+
+
+        //1. od daden string site broevi sto se nad 32 da se smenat so ascii ekvivalentot
+        // primer zdravo,32kakosi -> zdravo, kako si (bese dadena static funkcija String.fromCharCode()
+
+        // let str = prompt("Enter a string: ");
+        // let result = "";
+        // for (let i = 0; i < str.length; i++) {
+        //     if (str[i] >= '0' && str[i] <= '9') {
+        //         let num = "";
+        //         while (str[i] >= '0' && str[i] <= '9') {
+        //             num += str[i];
+        //             i++;
+        //         }
+        //         if (parseInt(num) >= 32) {
+        //             result += String.fromCharCode(parseInt(num));
+        //         } else {
+        //             result += num;
+        //         }
+        //     }
+        //     result += str[i];
+        // }
+        // console.log(result);
+
+        //what if we want to work on the str itself, rather than creating a new one
+
+        // let str = prompt("Enter a string: ");
+        // console.log(str);
+        // for (let i = 0; i < str.length; i++) {
+        //     if (str[i] >= '0' && str[i] <= '9') {
+        //         let num = "";
+        //         let j = i;
+        //         while (str[j] >= '0' && str[j] <= '9') {
+        //             num += str[j];
+        //             j++;
+        //         }
+        //         if (parseInt(num) >= 32) {
+        //             str = str.substring(0, i) + String.fromCharCode(parseInt(num)) + str.substring(j);
+        //             j=i-num.length;
+        //         }
+        //         i = j;
+        //     }
+        // }
+        // console.log(str);
+
+
+        //2.        3 strings find longest of them
+        // let flag = true;
+        // let numberStr = 0;
+        // let longest = "";
+        // while (flag) {
+        //     let string = prompt("Enter a string: ");
+        //     numberStr++;
+        //
+        //     if (string.length > longest.length) {
+        //         longest = string;
+        //     }
+        //     if (numberStr === 3) {
+        //         flag = false;
+        //     }
+        // }
+        //
+        // console.log(longest);
+
+
+        //3.
+        // 2chars divided by ;. Entar prompt for string, if you find either of the chars, replace them with new line
+
+        let charWithSpecial = prompt("Enter two characters separated by ;: ");
+        let str = prompt("Enter a string: ");
+        let chars = charWithSpecial.split(";");
+        let result = "";
+        for (let i = 0; i < str.length; i++) {
+            if (str[i] === chars[0] || str[i] === chars[1]) {
+                result += "\n";
+            } else {
+                result += str[i];
+            }
+        }
+
+        console.log(result);
+
+    </script>
+
+</head>
+<body>
+
+</body>
+</html>

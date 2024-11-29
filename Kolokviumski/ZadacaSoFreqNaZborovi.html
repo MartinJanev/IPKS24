@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Freq</title>
+    <script>
+        function func() {
+            document.getElementById('input-form').style.display = 'none';
+            const input = document.getElementById('input').value.toLowerCase();
+            const freq = {};
+            const words = input.split(' ').join('\n').split('\n').filter(Boolean);
+            words.forEach(word => {
+                freq[word] = (freq[word] || 0) + 1;
+            });
+            //show randomly (random y and x coordinate)on the screen with frequency as an indicator for size
+            const container = document.createElement('div');
+            container.style.display = 'flex';
+            container.style.flexWrap = 'wrap';
+            container.style.height = '100%';
+            container.style.width = '100%';
+
+            document.body.appendChild(container);
+            for (const word in freq) {
+                const r = Math.floor(Math.random() * 256);
+                const g = Math.floor(Math.random() * 256);
+                const b = Math.floor(Math.random() * 256);
+                const color = `rgb(${r},${g},${b})`;
+                const span = document.createElement('span');
+                span.textContent = word;
+                span.style.fontSize = `${freq[word] * 1.2 +60}px`;
+                span.style.margin = '5px';
+                span.style.color = color;
+                span.style.position = 'absolute';
+                span.style.top = `${Math.floor(Math.random() * 100)}vh`;
+                span.style.left = `${Math.floor(Math.random() * 100)}vw`;
+                container.appendChild(span);
+            }
+
+        }
+    </script>
+</head>
+<body>
+<section id="input-form">
+    <textarea id="input" rows="20" cols="50"></textarea>
+    <button onclick="func()">Прикажи</button>
+</section>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script>
+        const input = "1_John_Doe_10_15_12;2_Jane_Smith_11_13_9;"; // Sample input
+        let minAverage = Infinity;
+        let bestRacer = null;
+
+        // Split by ";" to get each racer's data
+        const racers = input.split(';').filter(Boolean);
+
+        racers.forEach(data => {
+            const parts = data.split('_'); // Split racer data by "_"
+            const id = parts[0];
+            const name = parts[1];
+            const surname = parts[2];
+            const times = parts.slice(3).map(Number); // Get race times as numbers
+
+            // Calculate average race time
+            const avgTime = times.reduce((a, b) => a + b, 0) / times.length;
+
+            // If this racer has the lowest average, update the best racer
+            if (avgTime < minAverage) {
+                minAverage = avgTime;
+                bestRacer = {id, name, surname, avgTime};
+            }
+        });
+
+        // Print out the best racer
+        console.log(`Racer with Lowest Average: ${bestRacer.name} ${bestRacer.surname}, ID: ${bestRacer.id}, Average Time: ${bestRacer.avgTime}`);
+
+    </script>
+
+</head>
+<body>
+
+</body>
+</html>

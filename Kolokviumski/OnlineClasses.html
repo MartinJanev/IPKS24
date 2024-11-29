@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>OnlineClasses</title>
+
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+        div {
+            display: flex;
+            flex-direction: row;
+            margin: 10px 0;
+        }
+
+        label {
+            width: 200px;
+        }
+
+        input, select {
+            width: 300px;
+        }
+
+        select {
+            text-align: center;
+        }
+
+        table {
+            border-collapse: collapse;
+            border: 1px solid black;
+        }
+
+        th, tr {
+            border: 1px solid black;
+            width: 100px;
+            padding: 5px 0;
+        }
+
+        td {
+            border: 1px solid black;
+            padding: 5px 0;
+            text-align: center;
+        }
+
+        button {
+            width: 50px;
+            margin: 10px 0;
+        }
+
+        #actionButtons {
+            text-align: center;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            border: 0;
+            gap: 10px;
+        }
+
+        td input{
+            text-align: center;
+            width: max-content;
+        }
+
+    </style>
+    <script>
+        let availableTeachers = 0;
+
+        function submitClass() {
+            let name = document.getElementById("name").value;
+            let email = document.getElementById("email").value;
+            let username = document.getElementById("username").value;
+            let age = parseInt(document.getElementById("age").value);
+            let role = document.getElementById("roles").value;
+            let pass = document.getElementById("pass").value;
+
+            let flagCap = false;
+            let flagNum = false;
+
+            for (let i = 0; i < pass.length; i++) {
+                if (pass[i] >= 'A' && pass[i] <= 'Z') {
+                    flagCap = true;
+                }
+                if (pass[i] >= '0' && pass[i] <= '9') {
+                    flagNum = true;
+                }
+            }
+
+            if (!name || !email || !username || isNaN(age) || !pass || !role) {
+                alert("Please fill all fields");
+                return;
+            } else if (pass.length < 10 || !flagCap || !flagNum) {
+                alert("Password must be at least 10 characters long and contain at least one capital letter and one number");
+                return;
+            } else if (role === "professor" && age < 18) {
+                alert("Professor must be at least 18 years old");
+                return;
+            }
+
+            let rows = document.querySelectorAll("table tr");
+            for (let i = 1; i < rows.length; i++) {
+                let rowUsername = rows[i].cells[1].innerText;
+                if (rowUsername === username) {
+                    alert("Username already exists");
+                    return;
+                }
+            }
+
+            let table = document.querySelector("table");
+            let row = document.createElement("tr");
+            row.id = username;
+            row.innerHTML = `
+            <td>${name}</td>
+            <td>${username}</td>
+            <td>${email}</td>
+            <td>${age}</td>
+            <td>${role}</td>
+            <td id="actionButtons">
+                <button onclick="hire(this)" style="display: ${role === "professor" ? "block" : "none"};">Hire</button>
+                <button onclick="toggleEdit(this)">Edit</button>
+            </td>
+        `;
+
+            if (role === "student") {
+                row.style.backgroundColor = "lightblue";
+            } else if (role === "professor") {
+                row.style.backgroundColor = "lightgreen";
+            }
+
+            table.appendChild(row);
+        }
+
+        function hire(obj) {
+            let spanForT = document.getElementById("teachers");
+            spanForT.innerHTML = ++availableTeachers;
+            displayData();
+
+            obj.style.display = "none";
+            obj.parentElement.parentElement.style.backgroundColor = "gray";
+        }
+
+        function displayData() {
+            document.getElementById("teachers").innerHTML = availableTeachers;
+        }
+
+        function toggleEdit(button) {
+            let row = button.parentElement.parentElement;
+            let isEditing = button.innerText === "Save";
+
+            if (isEditing) {
+                saveRow(row);
+                button.innerText = "Edit";
+            } else {
+                editRow(row);
+                button.innerText = "Save";
+            }
+        }
+
+        function editRow(row) {
+            let cells = row.querySelectorAll("td:not(:last-child)");
+            cells.forEach((cell, index) => {
+                if (index !== 1) { // Skip username column
+                    let value = cell.innerText;
+                    cell.innerHTML = `<input value="${value}" style="width: 100%;">`;
+                }
+            });
+        }
+
+        function saveRow(row) {
+            let cells = row.querySelectorAll("td:not(:last-child)");
+            cells.forEach((cell, index) => {
+                if (index !== 1) { // Skip username column
+                    let input = cell.querySelector("input");
+                    if (input) {
+                        let newValue = input.value.trim();
+                        if (!newValue) {
+                            alert("Fields cannot be empty!");
+                            return;
+                        }
+                        cell.innerText = newValue;
+                    }
+                }
+            });
+        }
+    </script>
+
+
+</head>
+<body>
+
+<h1>Online Classes</h1>
+
+<div>
+    <label for="name">Name and surname:</label>
+    <input id="name">
+</div>
+<div>
+    <label for="email">Email:</label>
+    <input id="email">
+</div>
+<div>
+    <label for="age">Age:</label>
+    <input id="age">
+</div>
+<div>
+    <label for="username">Username:</label>
+    <input id="username">
+</div>
+<div>
+    <label for="pass">Password:</label>
+    <input id="pass">
+</div>
+<div>
+    <label for="roles">Role:</label>
+    <select id="roles">
+        <option value="student">Student</option>
+        <option value="professor">Professor</option>
+    </select>
+</div>
+<button id="submit" onclick="submitClass()">Add</button>
+<p>Available teachers: <span id="teachers"><strong>0</strong></span></p>
+
+<h2>Users</h2>
+<table>
+    <tr>
+        <th style="width: 200px">Name</th>
+        <th style="width: 150px;">Username</th>
+        <th style="width: 300px;">Email</th>
+        <th>Age</th>
+        <th>Role</th>
+        <th>Actions</th>
+    </tr>
+</table>
+
+
+</body>
+</html>

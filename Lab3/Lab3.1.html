@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script>
+        const input = "TeamA:code1@TeamB:code2@code1:code2;3:2@"; // Sample input
+        const teams = {}; // Object to store each team's data
+        const codeToTeam = {}; // Mapping of codes to team names
+
+        //console.log(input);
+        // Split input by "@" to get each segment
+        const sections = input.split('@');
+
+        //console.log(sections);
+        // Process each section
+        sections.forEach(section => {
+            if (section.includes(':')) {
+                // Check if section is team data or match result based on presence of ";"
+                if (section.includes(';')) { //here goes if the section contains ";" - it means it is match data
+                    // Parse match results
+                    const [teamCodes, goals] = section.split(';');
+                    const [team1Code, team2Code] = teamCodes.split(':');
+                    const [goals1, goals2] = goals.split(':').map(Number);
+
+                    // Retrieve team names from the code-to-team mapping - if not found, ignore the match
+                    const team1Name = codeToTeam[team1Code];
+                    const team2Name = codeToTeam[team2Code];
+
+                    // Add goals to each team, initializing if necessary - ignore if team names are not found
+                    if (team1Name) teams[team1Name].totalGoals += goals1;
+                    if (team2Name) teams[team2Name].totalGoals += goals2;
+
+                } else { //here goes if the section does not contain ";" - it means it is team data
+                    // Parse team data (team name and code)
+                    const [teamName, code] = section.split(':');
+
+                    // Initialize team data if not already present
+                    if (!teams[teamName]) {
+                        teams[teamName] = {
+                            totalGoals: 0,
+                            codes: []
+                        };
+                    }
+                    teams[teamName].codes.push(code); // Add code to the team
+                    codeToTeam[code] = teamName; // Map code to team name for later use in matches
+
+
+                }
+            }
+        });
+
+        // Print the results
+        for (const team in teams) {
+            console.log(`Team: ${team}, Total Goals: ${teams[team].totalGoals}, Codes: ${teams[team].codes.join(', ')}`);
+        }
+
+
+    </script>
+</head>
+<body>
+
+</body>
+</html>

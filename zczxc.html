@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><title>Chapter 5, Example 1</title></head>
+<body>
+<script>
+    // let myString = " Welcome to Wrox books. " + "The Wrox website is www.wrox.com. " +
+    //     "Visit the Wrox website today. Thanks for buying Wrox";
+    // let foundAtPosition = 0;
+    // let wroxCount = 0;
+    // while (foundAtPosition != -1) {
+    //     foundAtPosition = myString.indexOf("[0-9]/g", foundAtPosition);
+    //     if (foundAtPosition != -1) {
+    //         wroxCount++;
+    //         foundAtPosition++;
+    //     }
+    // }
+    // document.write("There are " + wroxCount + " occurrences of the word Wrox");
+
+
+    // arr = prompt("Enter a string: ");
+    //
+    // function isPalindrome(str) {
+    //     let l = 0;
+    //     let r = str.length - 1;
+    //     while (l < r) {
+    //         if (str[l] != str[r]) {
+    //             return false;
+    //         }
+    //         l++;
+    //         r--;
+    //     }
+    //     return true;
+    // }
+    //
+    // nova = new Array();
+    // let brojac = 0;
+    // arr.split(";").forEach(function (item) {
+    //     if (isPalindrome(item)) {
+    //         nova.push(item);
+    //         brojac++;
+    //     }
+    // });
+    //
+    // alert("There are " + brojac + " palindromes in the string: \n" + nova.join("\n"));
+
+    // function findLongestWord(str) {
+    //     let words = str.split(" ");
+    //     let longest = "";
+    //     words.forEach(function (word) {
+    //         if (word.length > longest.length) {
+    //             longest = word;
+    //         }
+    //     });
+    //     return longest;
+    // }
+    //
+    // let str1 = prompt("Enter the first sentence: ");
+    // let str2 = prompt("Enter the second sentence: ");
+    // let str3 = prompt("Enter the third sentence: ");
+    //
+    // //from all three sentences, find the longest word
+    //
+    // let longest1 = findLongestWord(str1);
+    // let longest2 = findLongestWord(str2);
+    // let longest3 = findLongestWord(str3);
+    //
+    // let longest = longest1;
+    // if (longest2.length > longest.length) {
+    //     if (longest2.length > longest3.length) {
+    //         longest = longest2;
+    //     } else {
+    //         longest = longest3;
+    //     }
+    // }else if (longest3.length > longest.length) {
+    //     longest = longest3;
+    // }
+    //
+    // alert(longest);
+
+    function capitalize(word) {
+        return word.charAt(0).toUpperCase() + word.slice(1);
+    }
+
+    let str = prompt("Enter a string: ");
+    let words = str.replace(/_/g, " ").split(/\W+/);
+    let index = 0;
+    words.forEach(function (word) {
+        words[index++] = capitalize(word);
+    });
+
+    words.reverse();
+    alert(words.join(" "));
+
+
+</script>
+</body>
+</html>

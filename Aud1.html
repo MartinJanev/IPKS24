@@ -97,28 +97,80 @@
 
     //4
 
-    let ocena = prompt("Vnesete ocena: ");
+    // let ocena = prompt("Vnesete ocena: ");
+    //
+    // if (isNaN(ocena)) {
+    //     document.write("Vnesete validna ocena")
+    // } else {
+    //     if (ocena > 0 && ocena <= 50) {
+    //         document.write("5")
+    //     } else if (ocena > 50 && ocena <= 60) {
+    //         document.write("6")
+    //     } else if (ocena > 60 && ocena <= 70) {
+    //         document.write("7")
+    //     } else if (ocena > 70 && ocena <= 80) {
+    //         document.write("8")
+    //     } else if (ocena > 80 && ocena <= 90) {
+    //         document.write("9")
+    //     } else if (ocena > 90 && ocena <= 100) {
+    //         document.write("10")
+    //     } else {
+    //         document.write("Vnesete validna ocena")
+    //     }
+    // }
 
-    if (isNaN(ocena)) {
-        document.write("Vnesete validna ocena")
-    } else {
-        if (ocena > 0 && ocena <= 50) {
-            document.write("5")
-        } else if (ocena > 50 && ocena <= 60) {
-            document.write("6")
-        } else if (ocena > 60 && ocena <= 70) {
-            document.write("7")
-        } else if (ocena > 70 && ocena <= 80) {
-            document.write("8")
-        } else if (ocena > 80 && ocena <= 90) {
-            document.write("9")
-        } else if (ocena > 90 && ocena <= 100) {
-            document.write("10")
-        } else {
-            document.write("Vnesete validna ocena")
+    // var num = prompt("Base: ");
+    // var exponent = prompt("Exponent: ")
+    //
+    // let p = 1
+    //
+    // if (!isNaN(num) && !isNaN(exponent)) {
+    //     for (let i = 0; i < exponent; i++) {
+    //         p*=num;
+    //     }
+    // }
+    // document.write(p)
+
+    // let flag = 1;
+    // let x1 = 0, x2 = 0, x3 = 0;
+    // while (flag === 1) {
+    //     let x = prompt("Vnesi broj");
+    //     x = parseInt(x);
+    //     if (!isNaN(x)) {
+    //         if (x % 3 == 0) {
+    //             x1 += 1;
+    //         } else if (x % 3 == 1) {
+    //             x2 += 1;
+    //         } else {
+    //             x3 += 1;
+    //         }
+    //     } else {
+    //         flag = 0;
+    //     }
+    // }
+    //
+    // document.writeln("Ostatok 0 " + x1+"<br>");
+    // document.writeln("Ostatok 1 " + x2+"<br>");
+    // document.writeln("Ostatok 2 " + x3+"<br>");
+
+    let flag = 1;
+    let max = -Infinity
+    debugger
+    while (flag) {
+        var broj = parseInt(prompt())
+        if (!isNaN(broj)) {
+            if (broj > max) {
+                max = broj;
+            }
+        }else {
+            flag=0;
         }
     }
-
+    if (max !==-Infinity)
+    alert(max)
+    else {
+        alert("No number")
+    }
 
 </script>
 

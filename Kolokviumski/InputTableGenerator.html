@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Zadaca</title>
+
+
+    <style>
+        table {
+            margin-top: 20px;
+            border-collapse: collapse;
+            width: 300px;
+        }
+
+        th, td {
+            padding: 2px;
+            text-align: center;
+        }
+    </style>
+
+    <script>
+
+        //Name.Surname.Index
+        // John.Doe.100001
+        // Melody.Fernandez.100002
+        // Olivia.Lee.100003
+        // James.Fitzparick.100004
+        // Danielle.Mathis.100005
+        // Eddie.Johnson.100006
+
+
+        function createTable() {
+            let delimiter = document.getElementById("delimiter").value;
+            let input = document.getElementById("input").value;
+            let result = input.split('\n').map(x => x.split(delimiter));
+            let array = [];
+            for (let x of result) {
+                array.push(x);
+            }
+
+            let tablehead = document.createElement("thead");
+            let tablebody = document.createElement("tbody");
+            let table = document.getElementById("table");
+            table.innerHTML = "";
+            table.appendChild(tablehead);
+            table.appendChild(tablebody);
+
+            let tr = document.createElement("tr");
+            for (let i = 0; i < array[0].length; i++) {
+                let th = document.createElement("th");
+                th.textContent = array[0][i];
+                tr.appendChild(th);
+            }
+            tablehead.appendChild(tr);
+
+            for (let i = 1; i < array.length; i++) {
+                let tr = document.createElement("tr");
+                for (let j = 0; j < array[i].length; j++) {
+                    let td = document.createElement("td");
+                    td.textContent = array[i][j];
+                    tr.appendChild(td);
+                }
+                tablebody.appendChild(tr);
+            }
+
+
+        }
+    </script>
+</head>
+<body>
+
+<label for="input">Text:</label>
+<textarea id="input" rows="10" cols="30" name="Text:"></textarea>
+<br>
+<label for="delimiter">Delimiter:</label>
+<input id="delimiter">
+<br>
+<button onclick="createTable()">Create</button>
+
+<table id="table"></table>
+</body>
+</html>

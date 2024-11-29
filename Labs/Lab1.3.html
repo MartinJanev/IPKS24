@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lab1.3</title>
+</head>
+<body>
+<script>
+    let str = prompt();
+    str = str.split(/\s+/g);
+
+    console.log(str);
+
+    let maxLength = 0;
+    let longest = str[0];
+
+    for (let i of str) {
+        if (maxLength < i.length) {
+            maxLength = i.length;
+            longest = i;
+        }
+    }
+    alert(longest);
+
+
+
+</script>
+</body>
+</html>

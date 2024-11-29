@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <style>
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        li {
+            border: 1px solid black;
+            width: 30px;
+            border-radius: 40%;
+            margin: 0 3px;
+            padding: 5px;
+            text-align: center;
+            vertical-align: center;
+        }
+    </style>
+
+    <script>
+        function generateNumbers() {
+            numbers = []
+            while (numbers.length < 20) {
+                let broj = Math.floor(Math.random() * 50) + 1;
+                if (!numbers.includes(broj)) {
+                    numbers.push(broj);
+                }
+            }
+
+            let lista = document.createElement("ul");
+            for (let i = 0; i < 20; i++) {
+                let element = document.createElement("li");
+                element.innerText = numbers[i];
+                lista.appendChild(element);
+            }
+
+            let div = document.getElementById("numbers");
+            div.innerHTML = lista.outerHTML;
+        }
+
+        function generateRandom() {
+
+            let counter = 0;
+            let random = Math.floor(Math.random() * 10) + 1;
+            let randomNum = document.getElementById("randomNumber")
+            let numNeeded = document.getElementById("numNeeded");
+            randomNum.innerText = random;
+            let list = document.getElementById("numbers").getElementsByTagName("li");
+            for (let i = 0; i < list.length; i++) {
+                if (parseInt(list[i].innerText) % random === 0) {
+                    counter++;
+                    list[i].style.backgroundColor = "red";
+                    list[i].style.color = "white";
+                }else{
+                    list[i].style.backgroundColor = "white";
+                    list[i].style.color = "black";
+                }
+            }
+            numNeeded.innerHTML = counter;
+        }
+
+    </script>
+</head>
+<body>
+
+<h1>Random Number Exercise</h1>
+
+<button id="generate" onclick="generateNumbers()">Generate 20</button>
+<button id="random" onclick="generateRandom()">Random</button>
+<div>
+    <h2>Random Number: <span id="randomNumber">0</span></h2>
+</div>
+<p>Numbers that satisfy this conditon: <span id="numNeeded">0</span></p>
+
+<div id="numbers">
+</div>
+
+
+</body>
+</html>

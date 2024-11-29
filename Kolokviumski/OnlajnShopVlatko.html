@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+
+        th, tr {
+            border: 1px solid black;
+            width: 100px;
+        }
+
+        td {
+            border: 1px solid black;
+        }
+
+        td button {
+            display: flex;
+            justify-content: center;
+            align-self: center;
+        }
+
+        div {
+            margin: 10px 0;
+            display: flex;
+            flex-direction: row;
+            width: 300px;
+        }
+
+        label {
+            width: 100px;
+        }
+
+
+    </style>
+
+    <script>
+        var total = 0;
+
+        function submitProject() {
+            var name = document.getElementById("authorName").value;
+            var code = document.getElementById("code").value;
+            code = code.replaceAll("!", "");
+            for (var i = 0; i < code.length; i++) {
+                if (!isNaN(code[i])) {
+                    code = code.replaceAll(code[i], "");
+                }
+            }
+
+            console.log(code)
+            var price = (document.getElementById("price").value * 1.1).toFixed(2);
+            var status = document.getElementById("status").value;
+
+            if (name === "" || code === "" || price === "" || status === "") {
+                alert("Please fill all fields");
+                return;
+            } else {
+                var proverka = document.getElementById(code);
+                if (proverka !== null) {
+                    alert("This project already exists")
+                    return;
+                }
+                total += parseInt(price);
+                showPrice();
+                var row = "<tr id='" + code + "' class='" + price + "'><td>" + name + "</td><td>" + code + "</td><td>" + price + "</td><td><button onclick='remove(this)'>Remove</button></td></tr>"
+                var tabela = document.getElementById(status);
+                tabela.innerHTML += row;
+            }
+        }
+
+
+        function remove(obj) {
+            // var tabela = document.getElementById("tabela");
+            // var row = tabela.getElementsByTagName("tr");
+            // for (var i = 1; i < row.length; i++) {
+            //     row[i].onclick = function () {
+            //         var r = this.rowIndex;
+            //         tabela.deleteRow(r);
+            //     }
+            // }
+
+            var redica = obj.parentNode.parentNode;
+            var priceRow = redica.classList.value;
+            total -= parseInt(priceRow);
+            showPrice();
+            redica.parentNode.removeChild(redica);
+        }
+
+        function showPrice() {
+            var priceScreen = document.getElementById("total");
+            priceScreen.innerHTML = total;
+        }
+
+
+    </script>
+
+</head>
+<body>
+
+<h1>Project details</h1>
+
+<div>
+    <label for="authorName">Author:</label>
+    <input id="authorName">
+</div>
+<div>
+    <label for="code">Code:</label>
+    <input id="code">
+</div>
+<div>
+    <label for="price">Price:</label>
+    <input id="price" type="number">
+</div>
+<div>
+    <label for="status">Status:</label>
+    <select id="status">
+        <option value="used">used</option>
+        <option value="never-used">unused</option>
+    </select>
+</div>
+
+<button onclick="submitProject()">Submit</button>
+<p><strong>Total cost: <span id="total">0</span></strong></p>
+Used:
+<table id="used">
+    <tr>
+        <th>Author</th>
+        <th>Project name</th>
+        <th>Price</th>
+        <th>Actions</th>
+    </tr>
+</table>
+Unused:
+<table id="never-usedy">
+    <tr>
+        <th>Author</th>
+        <th>Project name</th>
+        <th>Price</th>
+        <th>Actions</th>
+    </tr>
+</table>
+
+
+</body>
+</html>

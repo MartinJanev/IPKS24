@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Marathon Participants</title>
+
+    <style>
+        body {
+            padding: 100px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        label {
+            width: 100px;
+            display: inline-block;
+            text-align: left;
+            margin: 5px 0;
+        }
+
+        input, select {
+            width: 200px;
+            height: fit-content;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 10px;
+            text-align: left;
+        }
+    </style>
+
+    <script>
+        let participants = [];
+
+
+        function addParticipant(event) {
+            // Prevent form submission
+            event.preventDefault();
+
+            // Get input values
+            let name = document.getElementById("name").value;
+            let surname = document.getElementById("surname").value;
+            let code = document.getElementById("code").value;
+
+
+            // Validate input
+            if (!name || !surname || !code) {
+                alert("Please fill in all fields.");
+                return;
+            }
+
+            let button1 = document.createElement("button");
+            button1.textContent = "Confirm";
+            button1.onclick = function () {
+                document.getElementById("confirmedRunners").value++;
+            }
+
+            let button2 = document.createElement("button");
+            button2.textContent = "Delete";
+            button2.onclick = function () {
+                let index = participants.findIndex(participant => participant.code === code);
+                participants.splice(index, 1);
+                renderTable();
+            }
+
+            // Add participant to the array
+            participants.push({name, surname, code,button1,button2});
+
+            // Update the table
+            renderTable();
+        }
+
+        function renderTable() {
+            let table = document.getElementById("table");
+            table.innerHTML = ""; // Clear existing table content
+
+            // Create table header
+            let tablehead = document.createElement("thead");
+            let tr = document.createElement("tr");
+            ["Name", "Surname", "Code", "Age", "Gender"].forEach(header => {
+                let th = document.createElement("th");
+                th.textContent = header;
+                tr.appendChild(th);
+            });
+            tablehead.appendChild(tr);
+            table.appendChild(tablehead);
+
+            // Create table body
+            let tablebody = document.createElement("tbody");
+            participants.forEach(participant => {
+                let tr = document.createElement("tr");
+                Object.values(participant).forEach(value => {
+                    let td = document.createElement("td");
+                    td.textContent = value;
+                    tr.appendChild(td);
+                });
+                tablebody.appendChild(tr);
+            });
+            table.appendChild(tablebody);
+        }
+    </script>
+</head>
+<body>
+
+<h1>Marathon Participants</h1>
+
+<form onsubmit="addParticipant(event)">
+    <label for="name">Name:</label><input id="name" type="text"><br>
+    <label for="surname">Surname:</label><input id="surname" type="text"><br>
+    <label for="code">Code:</label><input id="code" type="text"><br>
+    <label for="age">Age:</label><input id="age" type="number" min="0"><br>
+    <label for="identifier">Gender:</label>
+    <select id="identifier">
+        <option selected value=""></option>
+        <option value="Man">Man</option>
+        <option value="Woman">Woman</option>
+    </select><br>
+    <button type="submit">Submit</button>
+</form>
+
+<table id="table"></table>
+
+<p> Number of confirmed runners: <span id="confirmedRunners">0</span></p>
+
+</body>
+</html>

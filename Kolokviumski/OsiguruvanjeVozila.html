@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <style>
+        div {
+            display: flex;
+            flex-direction: row;
+            margin: 10px 0;
+        }
+
+        label {
+            width: 200px;
+        }
+
+        section #data {
+            width: 200px;
+            margin-right: 50px;
+        }
+
+        button {
+            margin: 10px 0;
+        }
+
+        h2 {
+            margin: 5px 0;
+        }
+
+        #results {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        #cards {
+            padding: 20px;
+            font-size: 20px;
+        }
+
+        #cards button {
+            font-size: 15px;
+        }
+
+        p {
+            margin: 10px 0;
+        }
+    </style>
+
+    <script>
+        let billsToPay = 0;
+
+        function generateBill() {
+            let price = 3000;
+            let name = document.getElementById("name").value;
+            let surname = document.getElementById("surname").value;
+            let tablica = document.getElementById("tablica").value;
+            let age = parseInt(document.getElementById("age").value);
+            let da = document.getElementById("da").checked;
+            let ne = document.getElementById("ne").checked;
+
+            if (!name || !surname || !age || (!da && !ne)) {
+                alert("Ве молиме пополнете ги сите полиња");
+                return;
+            } else if (!validTablica(tablica)) {
+                alert("Внесовте невалидна регистарска таблица");
+                return;
+            }
+            if (zlatnaTablica(tablica)) {
+                price += 1000;
+            }
+            if (da) {
+                price += 500;
+            }
+
+            let pole = document.querySelector("#results");
+            let div = document.createElement("div");
+
+            div.id = tablica;
+            div.style.border = "3px solid black";
+            div.innerHTML =
+                `<p id="cards">${name} ${surname}
+                <br>${tablica.toUpperCase()}
+                <br>Сообраќајки: ${da ? "Има" : "Нема"}
+                <br>Старост на возило: ${age}
+                <br>За плаќање: ${price}
+                <br><button onclick="pay(this)">Плати</button>&nbsp<button onclick="deleteBill(this)">Избриши</button>
+                </p>`;
+
+            if (age > 30) {
+                div.style.backgroundColor = 'red';
+                div.style.color = 'white';
+            } else {
+                div.style.backgroundColor = 'green';
+                div.style.color = 'white';
+            }
+            billsToPay++;
+            showPrice()
+            pole.appendChild(div);
+        }
+
+        function pay(obj) {
+            billsToPay--;
+            showPrice();
+
+
+            obj.parentNode.getElementsByTagName("button")[0].disabled = true;
+            obj.parentNode.getElementsByTagName("button")[1].disabled = true;
+        }
+
+        function deleteBill(obj) {
+            billsToPay--;
+            showPrice();
+            obj.parentNode.parentNode.remove();
+        }
+
+        function showPrice() {
+            document.getElementById("bills").innerText = billsToPay;
+        }
+
+        function validTablica(tablica) {
+            return !(tablica.length !== 10 || tablica[2] !== "-" || tablica[7] !== "-" || !tablica.substring(0, 2).match(/[A-Z]{2}/) || !tablica.substring(8, 10).match(/[A-Z]{2}/) || !tablica.substring(3, 7).match(/[0-9]{4}/))
+
+        }
+
+        function zlatnaTablica(tablica) {
+            let broevi = tablica.substring(3, 7);
+            for (let i = 1; i < broevi.length; i++) {
+                if (broevi[i] !== broevi[i - 1]) return false;
+            }
+            return true;
+        }
+
+    </script>
+
+</head>
+<body>
+
+<h1 style="text-align: center">Осигурување на возила</h1>
+
+<div>
+    <label for="name">Име</label>
+
+    <input id="name">
+</div>
+<div>
+    <label for="surname">Презиме</label>
+
+    <input id="surname">
+</div>
+<div>
+    <label for="tablica">Регистарска таблица</label>
+
+    <input id="tablica">
+</div>
+<div>
+    <label for="age">Години на старост</label>
+
+    <input id="age">
+</div>
+<section>
+    <label id="data">Соообраќајна незгода</label>
+    <label style="display: inline">Да</label>
+    <input type="radio" name="same" id="da">
+    <label style="display: inline">Не</label>
+    <input type="radio" name="same" id="ne">
+</section>
+
+
+<button onclick="generateBill()">Генерирај сметка</button>
+
+<h2>Сметки</h2>
+<p>Вкупно сметки за плаќање: <span id="bills">0</span></p>
+
+<section id="results"></section>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script>
+        // function stiliziraj() {
+        //     let x=document.getElementById("text");
+        //     x.style.color="red";
+        //     x.style.fontSize="20px";
+        //     x.style.fontFamily="Arial";
+        //     x.style.backgroundColor="yellow";
+        // }
+
+        // function cngBack(){
+        //     var x = document.getElementsByTagName("p");
+        //     for (var i = 0; i < x.length; i++) {
+        //         x[i].style.backgroundColor = "yellow";
+        //     }
+        // }
+
+        // function getAtr(){
+        //     let obj = document.getElementById("finki");
+        //     console.log(
+        //         obj.getAttribute("href")+
+        //         "\n"+obj.getAttribute("hreflang")+
+        //         "\n"+obj.getAttribute("rel")+
+        //         "\n"+obj.getAttribute("target")+
+        //         "\n"+obj.getAttribute("type")
+        //     )
+        // }
+
+        // let n = Math.floor((Math.random() * 100) + 1);
+        // console.log(n + "," + checkPrime(n))
+        //
+        // function checkPrime(n) {
+        //     if (n === 1) {
+        //         return false;
+        //     } else if (n === 2) {
+        //         return true;
+        //     } else {
+        //         for (let i = 2; i < n; i++) {
+        //             if (n % i === 0) {
+        //                 return false;
+        //             }
+        //         }
+        //
+        //         return true;
+        //     }
+        // }
+
+        // function highlight() {
+        //     var x = document.getElementsByTagName("strong");
+        //     for (var i = 0; i < x.length; i++) {
+        //         x[i].style.color = "green";
+        //     }
+        // }
+        //
+        // function returnNormal() {
+        //     var x = document.getElementsByTagName("strong");
+        //     for (var i = 0; i < x.length; i++) {
+        //         x[i].style.color = "black";
+        //     }
+        // }
+
+        // function getOp(){
+        //     var x = document.getElementById("mySelect");
+        //     var text = "No. of items : ";
+        //     var l = document.getElementById("mySelect").length;
+        //     text = text + l;
+        //     for (var i = 0; i < x.length; i++) {
+        //         text = text + "\n" + x.options[i].text;
+        //     }
+        //     alert(text);
+        // }
+
+    </script>
+
+</head>
+<body>
+<!--    <p id="text">Change style</p>-->
+<!--    <div>-->
+<!--        <button id="jsstyle" onclick="stiliziraj()">Stiliziraj</button>-->
+<!--    </div>-->
+
+<!--<input type="button" value="Click to set p background color" onclick="cngBack()">-->
+<!--<p>P1</p>-->
+<!--<p>P2</p>-->
+
+<!--    <p>-->
+<!--        <a id="finki" type="text/html" hreflang="en-us"-->
+<!--           rel="nofollow" tabindex="_self" href="https://www.finki.ukim.mk">FINKI</a>-->
+<!--    </p>-->
+<!--<button onclick="getAtr()">Get attributes</button>-->
+
+<!--<p>[<a href="#" onmouseover="highlight()" onmouseout="returnNormal()">-->
+<!--    On mouse over here bold words of the following p will be highlighted</a>]</p>-->
+<!--<p><strong>JavaScript</strong> is a programming language that <strong>enables</strong> you to create dynamically updating content,-->
+<!--    control <strong>multimedia</strong>, animate images, and much more.</p>-->
+
+
+<form>
+    <select id="mySelect">
+        <option>Green</option>
+        <option>Blue</option>
+        <option>Red</option>
+        <option>Yellow</option>
+    </select>
+    <input type="button" onclick="getOp()" value="Count and Outpput">
+</form>
+
+
+</body>
+</html>

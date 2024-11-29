@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>OnlineShop</title>
+
+    <style>
+
+        h1 {
+            text-align: center;
+        }
+
+        div {
+            display: flex;
+            flex-direction: row;
+            margin: 10px 0;
+        }
+
+        label {
+            display: inline-block;
+            width: 150px;
+        }
+
+        input, select {
+            width: 250px;
+        }
+
+        select {
+            text-align: center;
+        }
+
+        section {
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+        }
+
+        section div {
+            flex-direction: column;
+        }
+
+        table {
+            border-collapse: collapse;
+        }
+
+        th, tr, td {
+            border: 1px solid black;
+            border-top: 2px solid black;
+            width: 100px;
+        }
+
+        #clicker {
+            width: 60px;
+        }
+
+    </style>
+
+
+    <script>
+        let activeCounter = 0;
+
+        function submitItem() {
+            let user = document.getElementById("user").value;
+            let itemName = document.getElementById("itemName").value;
+            let itemCode = document.getElementById("itemCode").value;
+            let catalonicNum = itemCode;
+            let price = document.getElementById("price").value * 1.1;
+            let selected = document.getElementById("usedSelector").value;
+            catalonicNum = catalonicNum.replaceAll("!", "");
+
+            let tabela = document.getElementById(selected);
+
+            for (let i = 0; i < catalonicNum.length; i++) {
+                if (!isNaN(catalonicNum[i])) {
+                    catalonicNum = catalonicNum.replace(catalonicNum[i], "");
+                    i--;
+                }
+            }
+
+            if (!user || !itemName || !catalonicNum || !price) {
+                alert("Please fill all fields");
+                return;
+            } else if (price <= 0) {
+                alert("Price must be greater than 0");
+                return;
+            } else {
+                var proverka = document.getElementById(itemCode);
+                if (proverka !== null) {
+                    alert("This item already exists");
+                    return;
+                }
+            }
+            activeCounter++;
+            showPrice();
+            let row = "<tr id='" + itemCode + "' class='" + price + "'>" +
+                "<td>" + user + "</td>" +
+                "<td>" + itemName + "</td>" +
+                "<td>" + price + "</td>" +
+                "<td>" + itemCode + "</td>" +
+                "<td>" + catalonicNum + "</td>" +
+                "<td><button onclick='deleteItem(this)'>Sold</button></td>" +
+                "</tr>";
+            tabela.innerHTML += row;
+
+        }
+
+        function deleteItem(obj) {
+            //remove button, decrease activeCounter and paint the row yellow
+            activeCounter--;
+            showPrice();
+            let row = obj.parentElement.parentElement;
+            row.style.backgroundColor = "yellow";
+            let button = row.getElementsByTagName("button")[0];
+            row.innerHTML = row.innerHTML.replace(button.outerHTML, "");
+        }
+
+        function showPrice() {
+            document.getElementById("activeCounter").innerText = activeCounter;
+        }
+
+    </script>
+
+</head>
+<body>
+
+<h1>Online Shop</h1>
+
+<div>
+    <label for="user">Name and surname</label>
+    <input type="text" id="user">
+</div>
+<div>
+    <label for="itemName">Item</label>
+    <input type="text" id="itemName">
+</div>
+<div>
+    <label for="itemCode">Item code</label>
+    <input type="text" id="itemCode">
+</div>
+<div>
+    <label for="description">Item description</label>
+    <input type="text" id="description">
+</div>
+<div>
+    <label for="price">Price</label>
+    <input type="number" id="price">
+</div>
+<div>
+    <label for="usedSelector">Used</label>
+    <select id="usedSelector">
+        <option value="used">used</option>
+        <option value="never-used">unused</option>
+    </select>
+</div>
+<button id="clicker" onclick="submitItem()">Add</button>
+
+<p id="active">Active items: <span id="activeCounter">0</span></p>
+
+<section id="tableStyling">
+    <div>
+        <h2>Unused items:</h2>
+        <table id="never-used">
+            <tr>
+                <th>Name</th>
+                <th>Item</th>
+                <th>Price</th>
+                <th>Code</th>
+                <th>Number</th>
+                <th>Actions</th>
+            </tr>
+        </table>
+    </div>
+    <div>
+        <h2>Used items:</h2>
+        <table id="used">
+            <tr>
+                <th>Name</th>
+                <th>Item</th>
+                <th>Price</th>
+                <th>Code</th>
+                <th>Number</th>
+                <th>Actions</th>
+            </tr>
+        </table>
+    </div>
+</section>
+
+
+</body>
+</html>
