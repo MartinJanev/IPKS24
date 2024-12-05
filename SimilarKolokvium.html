@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <style>
+        #top {
+            display: flex;
+            flex-direction: row;
+            margin: 50px 0;
+            gap: 50px;
+        }
+
+        #formicka {
+            display: inline-block;
+            margin: auto 0;
+        }
+
+        #formicka div {
+            margin: 10px 0;
+        }
+
+        #formicka label {
+            display: inline-block;
+            width: 150px;
+        }
+
+        #formicka button {
+            margin-top: 10px;
+        }
+
+        #pole {
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: row;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        .karticka {
+            width: 200px;
+            height: 200px;
+            border: 1px solid black;
+            text-align: center;
+            padding: 10px;
+            font-size: 22px;
+        }
+    </style>
+
+    <script>
+        let cards = [];
+        let numCards = 0;
+
+        function Card(name, balance, oblog, karta, selectedColor) {
+            this.name = name;
+            this.balance = balance;
+            this.oblog = oblog;
+            this.karta = karta;
+            this.selectedColor = selectedColor;
+        }
+
+        function addCard() {
+            if (numCards >= 3) {
+                alert("Maximum of 3 cards reached.");
+                return;
+            }
+
+            let name = document.getElementById('name').value;
+            let balance = 100;
+            let oblog = parseInt(document.getElementById('oblog').value);
+            let karta = document.getElementById('karta').value;
+            let selectedColor = document.getElementById('colorOption').value;
+
+            if (!name || isNaN(oblog) || !karta) {
+                alert('Please fill all fields');
+                return;
+            } else {
+                if (cards.some(card => card && card.name === name)) {
+                    alert('A user with this name already exists.');
+                    return;
+                }
+            }
+
+            if (karta.length !== 2 || isNaN(karta.charAt(0)) || !isNaN(karta.charAt(1))) {
+                alert('Card must be in the format of a number followed by a letter (e.g., 1A).');
+                return;
+            }
+
+            let pole = document.getElementById('pole');
+            let cardDiv = document.createElement('div');
+
+            if (selectedColor === 'blue'){
+                cardDiv.style.color = 'white';
+            }
+
+
+            cards[numCards++] = new Card(name, balance, oblog, karta, selectedColor);
+
+
+            cardDiv.className = 'karticka';
+            cardDiv.style.backgroundColor = selectedColor;
+            cardDiv.id = `player-${numCards}`;
+            cardDiv.innerHTML = `
+            <p>Name: ${name}</p>
+            <p>Balance: <span id="balance-${numCards}">${balance}</span></p>
+            <p>Card: ${karta.toUpperCase()}</p>
+            <button onclick="exitPlayer(${numCards})">Exit</button>
+        `;
+            pole.appendChild(cardDiv);
+
+            if (numCards === 3) {
+                document.getElementById('generateCardButton').disabled = true;
+                alert("All players added. Click 'Start Game' to begin.");
+            }
+        }
+
+        function startGame() {
+            if (numCards < 3) {
+                alert("Add all players before starting the game.");
+                return;
+            }
+
+            let randomNum = Math.floor(Math.random() * 9) + 1;
+            let randomLetter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
+            let randomCard = `${randomNum}${randomLetter}`;
+            let colorOptions = ["red", "blue", "green", "yellow"];
+            let randomColor = colorOptions[Math.floor(Math.random() * colorOptions.length)];
+
+
+            let randomCardDiv = document.getElementById('randomCard')
+            randomCardDiv.style.backgroundColor = randomColor;
+
+            randomCardDiv.innerHTML = `
+            <div class="karticka">
+                <p>Random Card: ${randomCard}</p>
+            </div>
+            `;
+
+            let changedOblog = document.getElementById('oblog').value;
+            let formId = document.getElementById("karta").value;
+
+            for (let i = 0; i < numCards; i++) {
+                let card = cards[i];
+                if (!card) continue;
+
+                let idKarticka = card.karta;
+
+                if (idKarticka === formId) {
+                    card.oblog = changedOblog;
+                }
+
+                let balanceElem = document.getElementById(`balance-${i + 1}`);
+                let balance = parseInt(balanceElem.textContent);
+
+                if (card.karta === randomCard) {
+                    let bonus = 3 * card.oblog;
+                    balance += bonus;
+                } else if (parseInt(idKarticka.charAt(0)) === parseInt(randomNum) || idKarticka.charAt(1) === randomLetter) {
+                    let bonus = 2 * card.oblog;
+                    balance += bonus;
+                } else {
+                    balance -= card.oblog;
+                    if (balance <= 0) {
+                        balance = 0;
+                        alert(`${card.name} is out of balance.`);
+                        exitPlayer(i + 1);
+                    }
+                }
+
+                balanceElem.textContent = balance;
+            }
+        }
+
+        function exitPlayer(playerIndex) {
+            let cardDiv = document.getElementById(`player-${playerIndex}`);
+            cardDiv.remove();
+            cards[playerIndex - 1] = null;
+            numCards--;
+
+            if (numCards === 0) {
+                alert("All players exited. Game over.");
+                document.getElementById('generateCardButton').disabled = false;
+            }
+        }
+    </script>
+
+</head>
+<body>
+
+<div id="top">
+    <div id="formicka">
+        <div>
+            <label for="name">Name:</label>
+            <input type="text" id="name">
+        </div>
+
+        <div>
+            <label for="oblog">Oblog</label>
+            <input type="number" id="oblog">
+        </div>
+        <div>
+            <label for="karta">Karta</label>
+            <input type="text" id="karta" placeholder="ex. 1A">
+        </div>
+        <div>
+            <label for="colorOption">Color</label>
+            <select id="colorOption">
+                <option value="red">Red</option>
+                <option value="blue">Blue</option>
+                <option value="green">Green</option>
+                <option value="yellow">Yellow</option>
+            </select>
+        </div>
+        <button id="generateCardButton" onclick="addCard()">Generate Card</button>
+        <button onclick="startGame()">Start Game</button>
+    </div>
+    <div id="randomCard"></div>
+</div>
+<div id="pole"></div>
+</body>
+</html>

@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <style>
+        #formaInput {
+            display: inline-block;
+        }
+
+        #formaInput label {
+            display: inline-block;
+            width: 150px;
+            margin: 5px 0;
+        }
+
+        button {
+            margin: 10px 0;
+        }
+
+        select {
+            width: 100px;
+            text-align: center;
+        }
+
+        .circle {
+            border: 3px solid black;
+            width: 250px;
+            height: 250px;
+            border-radius: 100%;
+        }
+
+        .square {
+            width: 250px;
+            height: 250px;
+            border: 3px solid black;
+        }
+
+        .square p, .circle p {
+            margin: 8px;
+        }
+
+        .square p:first-child, .circle p:first-child {
+            padding-top: 20px;
+        }
+
+        .square button, .circle button {
+            margin: 8px 0;
+        }
+
+
+        #usersDiv {
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: row;
+            gap: 30px;
+        }
+
+
+        .hidden {
+            display: none;
+        }
+
+    </style>
+
+    <script>
+        let total = 0;
+        let users = [];
+        let numberCards = 0;
+
+        function Card(name, nickname, amount, colorObj, shape) {
+            this.name = name;
+            this.nickname = nickname;
+            this.amount = amount;
+            this.colorObj = colorObj;
+            this.shape = shape;
+            this.destinationPosition = numberCards;
+            this.startPosition = 0;
+            this.randomShape = "";
+        }
+
+
+        function addUser() {
+            let name = document.getElementById('name').value;
+            let nickname = document.getElementById('nickname').value;
+            let amount = parseInt(document.getElementById('amount').value);
+            let colorObj = document.getElementById('colorObj').value;
+            let shape = document.getElementById('shape').value;
+
+            if (!name || !nickname || !amount) {
+                alert('Please fill all fields');
+                return;
+            }
+
+            if (!checkNickname(nickname)) {
+                alert('Nickname must not contain numbers, uppercase letters, ? or {');
+                return;
+            }
+
+            users[numberCards++] = new Card(name, nickname, amount, colorObj, shape);
+
+            let usersDiv = document.getElementById('usersDiv');
+            let userDiv = document.createElement('div');
+            userDiv.className = shape;
+            userDiv.style.backgroundColor = colorObj;
+            userDiv.style.textAlign = 'center';
+            userDiv.innerHTML = `<p>Name: ${name}</p><p>Nick: ${nickname}</p><p>Amount: ${amount}</p>`;
+            usersDiv.appendChild(userDiv);
+
+            total += amount;
+        }
+
+        function generateGame() {
+
+            document.getElementById("totalAmount").style.display = "block";
+            document.getElementById("formaInput").style.display = "none";
+
+            let arr2 = [];
+
+            let counter = 0;
+            while (counter < numberCards) {
+                let randomPosition = Math.floor(Math.random() * numberCards);
+                if (arr2[randomPosition] === undefined) {
+                    arr2[randomPosition] = 1;
+                    users[counter].startPosition = randomPosition;
+                    counter++;
+                }
+            }
+
+            users.sort((a, b) => a.startPosition - b.startPosition);
+
+            let arr = ["circle", "square"];
+            for (let i = 0; i < users.length; i++) {
+                let randomShape = Math.floor(Math.random() * 2);
+                users[i].randomShape = arr[randomShape]
+            }
+            update();
+        }
+
+
+        function update() {
+            let usersDiv = document.getElementById('usersDiv');
+            usersDiv.innerHTML = '';
+            for (let i = 0; i < users.length; i++) {
+                let userDiv = document.createElement('div');
+                userDiv.className = users[i].randomShape;
+                userDiv.style.backgroundColor = users[i].colorObj;
+                userDiv.style.textAlign = 'center';
+                userDiv.innerHTML = `
+                <p>Name: ${users[i].name}</p>
+                <p>Nick: ${users[i].nickname}</p>
+                <p>Amount: ${users[i].amount}</p>
+                <p>Shape: ${users[i].shape}</p>
+                <p>Position: ${users[i].destinationPosition}</p>
+                <div><button onclick="sLeft(${i})"><</button><button onclick="sRight(${i})">></button></div>
+                <div><button onclick="changeShape(${i})">Change Shape</button></div>
+                `;
+                usersDiv.appendChild(userDiv);
+
+                let valueOdzemanje = 0;
+                if (i === users[i].destinationPosition) {
+                    valueOdzemanje = 0;
+                } else {
+                    valueOdzemanje = Math.abs(i - users[i].destinationPosition) * 30;
+                }
+
+                if (users[i].randomShape === users[i].shape) {
+                    valueOdzemanje += 70;
+                }
+
+                document.getElementById("total").innerHTML = parseInt(total - valueOdzemanje)
+            }
+
+
+        }
+
+        function changeShape(i) {
+            if (users[i].randomShape === "circle") {
+                users[i].randomShape = "square";
+            } else {
+                users[i].randomShape = "circle";
+            }
+            update();
+        }
+
+        function sLeft(i) {
+            console.log(i);
+            if (i === 0) {
+                return;
+            }
+            let temp = users[i];
+            users[i] = users[i - 1];
+            users[i - 1] = temp;
+
+            update();
+        }
+
+        function sRight(i) {
+            if (i === users.length - 1) {
+                return;
+            }
+            let temp = users[i];
+            users[i] = users[i + 1];
+            users[i + 1] = temp;
+
+            update();
+        }
+
+        function checkNickname(nickname) {
+            for (let i = 0; i < 10; i++) {
+                if (nickname.indexOf(i) !== -1) {
+                    alert('Nickname must not contain numbers');
+                    return false;
+                }
+            }
+
+            for (let i = 0; i < nickname.length; i++) {
+                if (nickname[i] >= 'A' && nickname[i] <= 'Z') {
+                    alert('Nickname must not contain uppercase letters');
+                    return false;
+                }
+                if (nickname[i].indexOf("?") !== -1 || nickname[i].indexOf("{") !== -1) {
+                    alert('Nickname must not contain ? or {');
+                    return false;
+                }
+            }
+            return true;
+        }
+    </script>
+</head>
+<body>
+<h1>LuckyFrom</h1>
+<div id="formaInput">
+    <div><label for="name">Name: </label>
+        <input id="name">
+    </div>
+    <div><label for="nickname">Nickname: </label>
+        <input id="nickname">
+    </div>
+    <div><label for="amount">Amount: </label>
+        <input type="number" id="amount">
+    </div>
+    <div><label for="colorObj">Color: </label>
+        <select id="colorObj">
+            <option value="orange">Orange</option>
+            <option value="purple">Purple</option>
+            <option value="lightgray">Lightgray</option>
+            <option value="blue">Blue</option>
+        </select>
+    </div>
+    <div><label for="shape">Shape: </label>
+        <select id="shape">
+            <option value="circle">Circle</option>
+            <option value="square">Square</option>
+        </select>
+    </div>
+    <button onclick="addUser()">Add User</button>
+</div>
+<div id="generator">
+    <h2>Users</h2>
+    <p style="display:none;" id="totalAmount">Total amount: <span id="total">0</span></p>
+    <button onclick="generateGame()">Generate</button>
+    <div id="usersDiv"></div>
+</div>
+
+</body>
+</html>

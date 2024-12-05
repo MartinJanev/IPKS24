@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <style>
+        #container {
+            display: inline-block;
+        }
+
+        .square {
+            width: 250px;
+            height: 250px;
+            display: inline-block;
+            border: 1px solid black;
+            text-align: center;
+        }
+
+        .circle {
+            width: 250px;
+            height: 250px;
+            display: inline-block;
+            border: 1px solid black;
+            border-radius: 100%;
+            text-align: center;
+        }
+    </style>
+
+    <script>
+
+        var numCards = 1;
+
+        function generateCard() {
+            let name = document.getElementById('name').value;
+            let code = document.getElementById('code').value;
+            let price = parseInt(document.getElementById('amount').value);
+            let color = document.getElementById('color').value;
+            let shape = document.getElementById('shape').value;
+
+            if (!name || !code || isNaN(price)) {
+                alert('Please fill all fields');
+                return;
+            }
+
+            for (let i = 1; i < 10; i++) {
+                if (code.indexOf(i) !== -1) {
+                    alert('Code cannot contain numbers');
+                    return;
+                }
+            }
+
+            for (let i = 0; i < code.length; i++) {
+                if (code.indexOf("&") !== -1 || code.indexOf("#") !== -1) {
+                    alert('Code cannot contain & or #');
+                    return;
+                }
+            }
+            if (code !== code.toUpperCase()) {
+                alert('Code must be uppercase');
+                return;
+            }
+
+            let pole = document.getElementById('container');
+            var karticka = "<div title='" + numCards + "' style='background-color: " + color + "' class='" + shape + "'><p>Name: " + name + "</p><p>Code: " + code + "</p><p>Price: " + price + "</p></div>"
+            pole.innerHTML += karticka;
+            numCards += 1;
+        }
+
+        function left(obj) {
+            var karta = obj.parentNode;
+            var karta_boja = karta.style.background;
+            var predmene = document.getElementById(karta.getAttribute('title') - 1) //error ima tuka
+            var karta_predmene_boja = predmene.style.background;
+            var temp = karta.innerHTML;
+            karta.innerHTML = predmene.innerHTML;
+            predmene.innerHTML = temp;
+            predmene.style.background = karta_boja;
+            karta.style.background = karta_predmene_boja;
+
+        }
+
+        function generateGame() {
+            // document.getElementById("inputField").style.display = "none";
+            var pole = document.getElementById("inputField")
+            pole.innerHTML = "";
+
+            let container = document.getElementById('container');
+            let cards = container.getElementsByTagName('div');
+
+            for (let i = 0; i < cards.length; i++) {
+                var pozicija = Math.floor(Math.random() * numCards) + 1;
+                var element_id = document.getElementById("pozicija");
+                if (element_id !== null) {
+                    i--;
+                    continue;
+                } else {
+                    cards[i].setAttribute('id', pozicija);
+                    var forma = Math.random() * 100;
+                    if (forma < 50) {
+                        forma = "Square";
+                    } else {
+                        forma = "Circle";
+                    }
+                    cards[i].innerHTML += "<p>Position: " + pozicija + "</p><p>Shape: " + forma + "</p><button onclick='left(this)'><</button><button onclick='right(this)'>></button><button onclick='changeShape(this)'>Change Shape</button>";
+                }
+            }
+        }
+    </script>
+
+</head>
+<body>
+
+<div id="inputField">
+    <div>
+        <label for="name">Name:</label>
+        <input type="text" id="name">
+    </div>
+    <div>
+        <label for="code">Code:</label>
+        <input type="text" id="code">
+    </div>
+    <div>
+        <label for="amount">Amount:</label>
+        <input type="number" id="amount">
+    </div>
+    <div>
+        <label for="color">Color</label>
+        <select id="color">
+            <option value="red">Red</option>
+            <option value="green">Green</option>
+            <option value="blue">Blue</option>
+        </select>
+    </div>
+    <div>
+        <label for="shape">Color</label>
+        <select id="shape">
+            <option value="circle">Circle</option>
+            <option value="square">Square</option>
+        </select>
+    </div>
+    <button onclick="generateCard()">Add Card</button>
+</div>
+<div>
+    <h2>Game cards</h2>
+    <button onclick="generateGame()">Start Game</button>
+</div>
+<div id="container"></div>
+
+</body>
+</html>
