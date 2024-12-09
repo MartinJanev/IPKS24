@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .inputs, .card {
+            background-color: #fff;
+            padding: 20px 50px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            width: 500px;
+            font-weight: bolder;
+            text-align: left;
+        }
+
+        .inputs h2 {
+            margin: 10px 0;
+            padding: 0;
+            color: #333;
+        }
+
+        #enterTicket {
+            margin: 5px 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #enterTicket label {
+            margin-bottom: 5px;
+            font-weight: normal;
+        }
+
+        #enterTicket input {
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+
+        .inputs button {
+            padding: 6px;
+            width: 100%;
+            background-color: blue;
+            color: #fff;
+            font-weight: bolder;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .card {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 350px;
+            height: 200px;
+            gap: 10px;
+        }
+
+        .card button {
+            background-color: red;
+            color: #fff;
+            font-weight: bolder;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0 10px;
+            padding: 5px 10px;
+        }
+
+        #tickets {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        #totalCostPar {
+            width: 100%;
+            padding-left: 20px;
+            text-align: left;
+        }
+
+    </style>
+
+
+    <script>
+        let tickets = [];
+        let total = 0;
+
+        function enterTicket() {
+            let ticketNumber = document.getElementById("ticketNumber").value;
+            let dateCreated = new Date();
+
+            let ticketFinder = tickets.find(ticket => ticket.ticketNumber === ticketNumber);
+            if (ticketFinder) {
+                alert("Ticket already exists");
+                return;
+            }
+
+
+            let ticket = {
+                ticketNumber: ticketNumber,
+                dateCreated: dateCreated,
+            };
+
+            let pole = document.getElementById("tickets");
+            let ticketDiv = document.createElement("div");
+            ticketDiv.id = ticketNumber;
+            ticketDiv.className = "card";
+            ticketDiv.innerHTML = `
+                <h3>Ticket Number: ${ticket.ticketNumber}</h3>
+                <p>Date Created: ${ticket.dateCreated.getHours()}:${ticket.dateCreated.getMinutes().toString().padStart(2, '0')}:${ticket.dateCreated.getUTCSeconds().toString().padStart(2, '0')}</p>
+                <div><button onclick="payTicket(this)">Pay Ticket</button><button onclick="payLost(this)">Pay Lost</button> </div>
+`;
+
+            pole.appendChild(ticketDiv);
+            tickets.push(ticket);
+        }
+
+        function payTicket(obj) {
+            exitDate = new Date();
+            let ticket = tickets.pop();
+            let cost = Math.ceil((exitDate - ticket.dateCreated) / 1000 / 60) * 10;
+            total += cost;
+            document.getElementById("totalSpan").innerText = total;
+
+            ticket = obj.parentNode.parentNode;
+            ticket.style.backgroundColor = "#74a574";
+
+            ticket.querySelectorAll("button").forEach(button => button.disabled = true);
+
+        }
+
+        function payLost(obj) {
+            total += 500;
+            document.getElementById("totalSpan").innerText = total;
+
+            var ticket = obj.parentNode.parentNode;
+            ticket.style.backgroundColor = "#e77a7a";
+
+            ticket.querySelectorAll("button").forEach(button => button.disabled = true);
+        }
+    </script>
+
+</head>
+<body>
+
+<div class="inputs">
+    <h2>Parking Simluator</h2>
+    <div id="enterTicket">
+        <label for="ticketNumber">Enter Ticket Number</label>
+        <input type="text" id="ticketNumber">
+    </div>
+    <button onclick="enterTicket()">Enter Ticket</button>
+</div>
+<div id="tickets"></div>
+<p id="totalCostPar">Total cost: <span id="totalSpan">0</span>$</p>
+
+</body>
+</html>
