@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+    <style>
+        #container {
+            width: 800px;
+            height: 400px;
+        }
+    </style>
+</head>
+<body>
+
+
+<div id="container"></div>
+
+<script>
+
+    //Bar chart
+
+    // const data = [{
+    //     x: ['Jan', 'Feb', 'Mar', 'Apr', 'May'], //podatok vo x-oskata
+    //     y: [10, 12, 14, 18, 16],                //podatok vo y-oskata
+    //     type: 'bar'                             //kakov vid na grafik sakame da prikazime
+    // }];
+
+    //Line chart
+
+    // const data = [{
+    //     x: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June'], //podatok vo x-oskata
+    //     y: [15, 12, 14, 18, 16, 17],                //podatok vo y-oskata
+    //     type: 'scatter',                             //kakov vid na grafik sakame da prikazime
+    //     mode: 'lines'
+    // }];
+
+
+    //Pie chart
+
+    // const data = [{
+    //     values: [19, 26, 55,32],                                   //podatok
+    //     labels: ['Residential', 'Non-Residential', 'Utility','Non-Utility'],  //kategorii
+    //     type: 'pie'                                             //kakov vid na grafik sakame da prikazime
+    // }];
+
+    //Scatter chart
+
+    // const data = [{
+    //     x: [1, 2, 3, 4, 5],                     //podatok vo x-oskata
+    //     y: [10, 12, 14, 18, 16],                //podatok vo y-oskata
+    //     mode: 'markers',                        //kakov vid na grafik sakame da prikazime
+    //     type: 'scatter'
+    // }];
+
+    //Kombiniranje na povekje grafici
+
+    const expenseData = {
+        x: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June'], //podatok vo x-oskata
+        y: [15, 12, 14, 18, 16, 17],                //podatok vo y-oskata
+        type: 'bar',                             //kakov vid na grafik sakame da prikazime
+        name: 'Expenses'
+    }
+
+    const savingsData = {
+        x: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June'], //podatok vo x-oskata
+        y: [5, 8, 10, 12, 6, 7],                //podatok vo y-oskata
+        type: 'scatter',                             //kakov vid na grafik sakame da prikazime
+        mode: 'lines+markers',
+        name: 'Savings'
+    }
+    const layout = {
+        title: 'Expenses and Savings',
+        xaxis: {
+            title: 'Month'
+        },
+        yaxis: {
+            title: 'Amount'
+        }
+    }
+
+    Plotly.newPlot('container', [expenseData, savingsData], layout);
+
+
+    //developerData[0].earnings.map((earning) => earning.month);
+    //developerData[0].earnings.map((earning) => earning.amount);
+</script>
+
+</body>
+</html>

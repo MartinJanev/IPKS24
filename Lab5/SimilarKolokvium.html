@@ -46,11 +46,16 @@
             padding: 10px;
             font-size: 22px;
         }
+
+        .hide {
+            display: none;
+        }
     </style>
 
     <script>
         let cards = [];
         let numCards = 0;
+        let deletedFlag = false;
 
         function Card(name, balance, oblog, karta, selectedColor) {
             this.name = name;
@@ -90,7 +95,7 @@
             let pole = document.getElementById('pole');
             let cardDiv = document.createElement('div');
 
-            if (selectedColor === 'blue'){
+            if (selectedColor === 'blue') {
                 cardDiv.style.color = 'white';
             }
 
@@ -111,14 +116,15 @@
 
             if (numCards === 3) {
                 document.getElementById('generateCardButton').disabled = true;
-                alert("All players added. Click 'Start Game' to begin.");
             }
         }
 
         function startGame() {
             if (numCards < 3) {
-                alert("Add all players before starting the game.");
-                return;
+                if (!deletedFlag) {
+                    alert("Add all players before starting the game.");
+                    return;
+                }
             }
 
             let randomNum = Math.floor(Math.random() * 9) + 1;
@@ -165,6 +171,7 @@
                         balance = 0;
                         alert(`${card.name} is out of balance.`);
                         exitPlayer(i + 1);
+                        i--;
                     }
                 }
 
@@ -182,6 +189,7 @@
                 alert("All players exited. Game over.");
                 document.getElementById('generateCardButton').disabled = false;
             }
+            deletedFlag = true;
         }
     </script>
 

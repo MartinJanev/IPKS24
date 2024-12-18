@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <style>
+        /*.box {*/
+        /*    width: 200px;*/
+        /*    height: 200px;*/
+        /*    background-color: red;*/
+        /*    border: 1px solid black;*/
+        /*    position: relative;*/
+        /*}*/
+
+        body {
+            position: relative;
+            padding-left: 200px;
+            padding-top: 100px;
+        }
+
+        .circle {
+            border-radius: 50%;
+            width: 200px;
+            height: 200px;
+            border: 1px solid black;
+            position: absolute;
+        }
+
+        .green-circles {
+            background-color: green;
+        }
+
+        .red-circles {
+            background-color: red;
+        }
+
+        .blue-circles {
+            background-color: blue;
+        }
+
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+</head>
+<body>
+
+<!--<div class="box"></div>-->
+
+<div class="red-circles circle"></div>
+<div class="blue-circles circle"></div>
+<div class="green-circles circle"></div>
+
+<script>
+    // const box = document.querySelector('.box');
+    // let pozicija = 0;
+    //
+    //
+    // const interval = setInterval(() => {
+    //     pozicija += 2;
+    //     box.style.transform = `translateX(${pozicija}px)`;
+    //     if (pozicija >= 1200) {
+    //         clearInterval(interval);
+    //     }
+    // }, 7);
+
+    function animate() {
+        //za 1
+        // anime({
+        //     targets: '.box',
+        //     translateX: 300,
+        //     translateY: 300,
+        //     duration: 500,
+        //     easing: 'easeOutQuad'
+        // });
+        //
+        // //za nad 1
+        //
+        // anime({
+        //     targets: '.box',
+        //     keyframes: [
+        //         {
+        //             translateX: 300,
+        //             translateY: 300,
+        //             duration: 1000,
+        //             easing: 'easeOutQuad'
+        //         },
+        //         {
+        //             scale: [1, 1.5],
+        //             backgroundColor: '#0F0',
+        //             duration: 500,
+        //             easing: 'easeOutSine',
+        //             borderRadius: ['0%', '50%'],
+        //         }
+        //     ],
+        //     loop: true
+        // })
+
+        let animeTimeline = anime.timeline({
+            loop: true
+        })
+
+        animeTimeline.add({
+            targets: '.red-circles',
+            translateX: 300,
+            backgroundColor: '#FF6347',
+            duration: 1000,
+        })
+        animeTimeline.add({
+            targets: '.green-circles',
+            translateY: 300,
+            backgroundColor: '#32CD32',
+            duration: 1000,
+        }, '-=500')
+        animeTimeline.add({
+            targets: '.blue-circles',
+            translateX: 300,
+            translateY: 300,
+            backgroundColor: '#4682B4',
+            duration: 1000,
+        })
+    }
+
+    setTimeout(animate, 1000)
+
+
+</script>
+</body>
+</html>

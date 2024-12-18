@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Animacii</title>
+
+    <style>
+
+        #container {
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            position: relative;
+            margin: 30px;
+            margin-top: 80px;
+        }
+
+        .card {
+            width: 150px;
+            height: 200px;
+            position: absolute;
+            border-radius: 8%;
+        }
+
+        /*.box:hover {*/
+        /*    !*transform: scale(1.5);*!*/
+        /*    !*transform: translateX(500px);*!*/
+        /*}*/
+
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script>
+        //setTimeout - se izvrshuva samo ednas po x ms
+        //setInterval - se izvrsuva na sekoi x ms
+
+        function animateBox() {
+            // anime({
+            //     targets: '.red-circle',
+            //     keyframes: [
+            //         {translateX: 500, duration: 2000},
+            //         {translateY: 300, borderRadius: '50%', duration: 3000},
+            //         {translateX: -500, duration: 2000},
+            //     ],
+            // })
+
+            anime.timeline({
+                loop: false
+            })
+                .add({
+                    targets: '.red-circle',
+                    translateX: 500,
+                    duration: 3000,
+                })
+                .add({
+                    targets: '.green-circle',
+                    translateX: 500,
+                    duration: 3000,
+                })
+
+
+        }
+
+        let colors = ['yellow', 'green', 'blue', 'red', 'black', 'pink', "gray"];
+
+
+        function animateCards() {
+            let animeTimeline = anime.timeline({
+                loop: false,
+                ease: 'linear',
+            })
+
+            for (let i = 0; i < colors.length; i++) {
+                animeTimeline.add({
+                    targets: `.${colors[i]}-card`,
+                    translateX: i * 180,
+                    translateY: 350 - (i * 10),
+                    duration: 1500,
+                }, i === 0 ? "-=0" : "-=1000")
+            }
+
+            for (let i = 0; i < colors.length; i++) {
+                animeTimeline.add({
+                    targets: `.${colors[i]}-card`,
+                    rotate: 720,
+                    borderRadius: "50%",
+                    height: 150,
+                    duration: 3000,
+                }, i === 0 ? "-=0" : "-=1500")
+            }
+
+        }
+
+        window.onload = function () {
+
+            for (let i = 0; i < colors.length; i++) {
+                let card = document.createElement('div');
+                card.style.backgroundColor = colors[i];
+                card.className = `card ${colors[i]}-card`;
+                card.style.left = `${i * 10}px`
+                card.style.top = `${i * 10}px`
+
+
+                document.getElementById("container").appendChild(card);
+            }
+
+            setTimeout(animateCards, 3000)
+
+        }
+
+    </script>
+</head>
+<body>
+
+<div id="container">
+
+</div>
+
+</body>
+</html>
