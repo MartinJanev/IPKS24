@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+
+
+    <style>
+        #container {
+            position: relative;
+            margin-top: 20px;
+        }
+
+        .kv {
+            width: 20px;
+            height: 20px;
+            border: 1px solid black;
+            border-radius: 5%;
+            position: absolute;
+            margin: 0 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div>
+    <button id="startGame" onclick="startGame()">Start</button>
+    <button id="stopGame" onclick="stopGame()">Stop</button>
+</div>
+
+
+<div id="container"></div>
+<script>
+    let squares = [];
+    let randNums = [];
+    let animeTimeline;
+    let endpoint = 400;
+
+    function animateCards() {
+        animeTimeline = anime.timeline({
+            loop: false,
+            ease: 'easeOutExpo',
+        });
+
+        let num = 0;
+        while (num < squares.length) {
+            let random = Math.floor(Math.random() * squares.length);
+            if (randNums.includes(random)) {
+                continue;
+            } else {
+                randNums.push(random);
+                animeTimeline.add({
+                    targets: `.kv-${random}`,
+                    translateY: endpoint,
+                    duration: 6500,
+                    opacity: 0,
+                    easing: 'cubicBezier(.25, .25, .10, .55)',
+                    rotate: 8640,
+                    direction: 'normal',
+                    update: function (anim) {
+                        const target = anim.animatables[0].target; // Get the animated element
+                        const transform = target.style.transform; // Get current transform style
+
+                        const match = /translateY\(([^)]+)\)/.exec(transform);
+                        if (match) {
+                            const translateY = parseFloat(match[1]);
+                            target.style.top = translateY + "px"; // Update the top position dynamically
+                        }
+                    }
+                }, num === 0 ? "-=0" : '-=6300');
+                num++;
+            }
+        }
+    }
+
+    function stopGame() {
+        animeTimeline.pause();
+        const container = document.getElementById("container");
+        const squares = container.querySelectorAll(".kv");
+
+
+        squares.forEach(square => {
+            const top = parseInt(square.style.top, 10); // Get current top position
+            if (top > 0 && top < 500) { // Check if square is between start (0px) and end (750px)
+                square.remove(); // Remove the square from the DOM
+            }
+        });
+    }
+
+    function startGame() {
+        squares = [];
+        randNums = [];
+        document.getElementById("container").innerHTML = "";
+
+        for (let i = 0; i < 40; i++) {
+            let square = document.createElement("div");
+            square.className = `kv kv-${i}`;
+            let randomColor = Math.floor(Math.random() * 16777215).toString(16);
+            square.style.backgroundColor = "#" + randomColor;
+            square.style.left = (25 * i + Math.floor(Math.random() * 50) + 1) + "px";
+            square.style.top = "0px";
+            squares[i] = square;
+            document.getElementById("container").appendChild(square);
+        }
+
+        setTimeout(animateCards, 200);
+    }
+</script>
+
+
+</body>
+</html>
