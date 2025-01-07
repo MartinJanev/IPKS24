@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <!--    // 13 ipks-->
+    <!--    // 17 aps-->
+    <!--    // 20 mrezi-->
+    <!--    // 21 vis-->
+
+    <!--    //2 zadaci po 1h-->
+    <!--    //najklucno a najlesno e ova-->
+
+    <script>
+        //JSON.parse() - convert JSON string to object
+        //JSON.stringify() - convert object to JSON string
+    </script>
+
+</head>
+<body>
+<input type="text" id="movie_title">
+<button onclick="fetchMovie()">Fetch</button>
+<p id="title"></p>
+<p id="actors"></p>
+<p id="plot"></p>
+<img src="" id="poster" alt="">
+
+<!--<div id="karticki" style="width: 1000px; height: 1000px; border: 1px solid black"></div>-->
+
+<script>
+
+    //webhook online za glumenje na server
+
+
+    function fetchMovie() {
+        var title = document.getElementById('movie_title').value;
+        var url = `http://www.omdbapi.com/?apikey=3ca91790&t=${title}`;
+        fetch(url)
+            .then(response => response.json())
+            .then(function (data) {
+                console.log(data);
+                document.getElementById('title').innerText = data.Title;
+                document.getElementById('actors').innerText = data.Actors;
+                document.getElementById('plot').innerText = data.Plot;
+                document.getElementById('poster').src = data.Poster;
+            })
+
+        // var karticki = document.getElementById('karticki')
+        // fetch('webhook-info')
+        //     .then(response => response.json())
+        //     .then(function (data) {
+        //         for (let i = 0; i < data.length; i++) {
+        //             var karticka = "<div style='width: " + data[i].width + ";height: " + data[i].height + ";position:absolute;top: " + data[i].top + ";left: " + data[i].left + "'></div>"
+        //             karticki.innerHTML += karticka
+        //         }
+        //     })
+    }
+</script>
+</body>
+</html>

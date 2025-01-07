@@ -48,12 +48,12 @@
 
     //Scatter chart
 
-    // const data = [{
-    //     x: [1, 2, 3, 4, 5],                     //podatok vo x-oskata
-    //     y: [10, 12, 14, 18, 16],                //podatok vo y-oskata
-    //     mode: 'markers',                        //kakov vid na grafik sakame da prikazime
-    //     type: 'scatter'
-    // }];
+    const data = [{
+        x: [1, 2, 3, 4, 5],                     //podatok vo x-oskata
+        y: [10, 12, 14, 18, 16],                //podatok vo y-oskata
+        mode: 'markers',                        //kakov vid na grafik sakame da prikazime
+        type: 'scatter'
+    }];
 
     //Kombiniranje na povekje grafici
 
@@ -81,6 +81,7 @@
         }
     }
 
+    // Plotly.newPlot('container', data);
     Plotly.newPlot('container', [expenseData, savingsData], layout);
 
 

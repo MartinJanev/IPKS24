@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+    <style>
+        table {
+            border-collapse: collapse;
+            margin: 10px 0;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 5px 10px;
+            text-align: left;
+        }
+
+        #myDiv {
+            width: 1000px;
+            height: 600px;
+        }
+
+    </style>
+
+</head>
+<body>
+<div>
+    <label for="city">City:</label>
+    <input type="text" id="city" name="city">
+</div>
+
+<div>
+    <label for="temperature">Temperature:</label>
+    <input type="text" id="temperature" name="temperature">
+</div>
+
+<div>
+    <label for="day">Day:</label>
+    <input type="text" id="day" name="day">
+</div>
+
+<button onclick="addRow()">Add Row</button>
+
+<table>
+    <tr>
+        <th>City</th>
+        <th>Temperature</th>
+        <th>Day</th>
+    </tr>
+</table>
+
+<!--<button onclick="graphify()">Graphify</button>-->
+<button onclick="graphifyFetch()">Graphify</button>
+
+<div id="myDiv"></div>
+
+<script>
+
+
+    let cities = [];
+
+    function City(name) {
+        this.name = name;
+        this.days = [];
+        this.temperatures = [];
+    }
+
+    function addRow() {
+        let city = document.getElementById("city").value;
+        let temperature = document.getElementById("temperature").value;
+        let day = document.getElementById("day").value;
+
+        let proverka = cities.filter(x => x.name === city)[0];
+        if (proverka) {
+            proverka.days.push(day);
+            proverka.temperatures.push(temperature);
+        } else {
+            let newCity = new City(city);
+            newCity.days.push(day);
+            newCity.temperatures.push(temperature);
+            cities.push(newCity);
+        }
+
+        let table = document.querySelector("table");
+        let row = "<tr><td>" + city + "</td><td>" + temperature + "</td><td>" + day + "</td></tr>";
+        table.innerHTML += row;
+    }
+
+
+    function graphify() {
+        let podatoci = [];
+        for (let i = 0; i < cities.length; i++) {
+            let trace = {
+                x: cities[i].days,
+                y: cities[i].temperatures,
+                type: 'scatter',
+                name: cities[i].name
+            }
+            podatoci.push(trace);
+        }
+
+        let layout = {
+            title: 'Temperature Graph',
+            xaxis: {
+                title: 'Day'
+            },
+            yaxis: {
+                title: 'Temperature'
+            }
+        };
+
+        Plotly.newPlot('myDiv', podatoci, layout);
+
+    }
+
+
+    function graphifyFetch() {
+        let podatoci = [];
+
+        fetch("https://webhook.site/509b3cce-fdcb-474a-9dc3-7cee50b50a59")
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                return response.json();
+            })
+            .then(data => {
+                for (let i = 0; i < data.length; i++) {
+                    let trace = {
+                        x: data[i].days,
+                        y: data[i].temperatures.map(Number),
+                        type: 'scatter',
+                        name: data[i].city
+                    };
+                    podatoci.push(trace);
+                }
+
+                let layout = {
+                    title: 'Temperature Graph',
+                    xaxis: {
+                        title: 'Day'
+                    },
+                    yaxis: {
+                        title: 'Temperature'
+                    }
+                };
+
+                Plotly.newPlot('myDiv', podatoci, layout);
+            })
+            .catch(error => {
+                console.error("Error fetching data:", error);
+            });
+    }
+
+</script>
+</body>
+</html>

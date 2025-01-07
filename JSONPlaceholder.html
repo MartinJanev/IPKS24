@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div>
+    <p id="title"></p>
+</div>
+
+<script>
+    fetch('https://jsonplaceholder.typicode.com/posts')
+        .then((response) => response.json())
+        .then(function (data) {
+            for (let i = 0; i < data.length; i++) {
+                const title = document.getElementById('title');
+                if (i % 2 === 0) {
+                    data[i].title = data[i].title.split('').map((char, index) => {
+                        if (index === 0 || index % 11 === 0) {
+                            return char.toUpperCase();
+                        }
+                        return char;
+                    }).join('');
+                    title.innerHTML += `<span style="color: red; font-size: 20px">${data[i].title}</span>\t\t\t`
+                } else {
+                    data[i].title = data[i].title.split('').map((char, index) => {
+                        if (index === 0 || index % 9 === 0) {
+                            return char.toUpperCase();
+                        }
+                        return char;
+                    }).join('');
+
+                    title.innerHTML += `<span style="color: blue; font-size: 20px">${data[i].title}</span><br>`
+                }
+            }
+        })
+</script>
+</body>
+</html>

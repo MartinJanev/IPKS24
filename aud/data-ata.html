@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        #placeToPlace {
+            width: 800px;
+            height: 400px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="placeToPlace"></div>
+
+<script>
+    fetch("https://webhook.site/239a7d84-46e1-4953-93cc-d55b73cf9a2a")
+        .then((response) => response.json())
+        .then(function (data) {
+            console.log(data);
+            var languages = {};
+            data.forEach(item => {
+                languages[item.language] = (languages[item.language] || 0) + 1;
+            });
+            let keys = Object.keys(languages);
+            let vals = Object.values(languages);
+
+            console.log(keys);
+            console.log(vals);
+
+            //scatter chart
+
+            // var chart = [{
+            //     y: vals,
+            //     x: keys,
+            //     type: 'scatter',
+            //     mode: 'markers'
+            // }];
+
+
+            //bar chart
+
+            var chart = [{
+                y: vals,
+                x: keys,
+                type: 'bar'
+            }];
+
+            var layout = {
+                height: 600,
+                width: 800,
+                annotations: [
+                    {
+                        font: {
+                            size: 20
+                        },
+                        showarrow: false,
+                        text: 'Languages',
+                        x: 0.5,
+                        y: 0.5
+                    }
+                ]
+            };
+            //pie chart
+
+            // var chart = [{
+            //     values: vals,
+            //     labels: keys,
+            //     type: 'pie',
+            //     hole: 0.4,
+            //     textinfo: 'label+percent',
+            //     textposition: 'outside'
+            // }];
+            //
+            // var layout = {
+            //     height: 600,
+            //     width: 800,
+            //     annotations: [
+            //         {
+            //             font: {
+            //                 size: 20
+            //             },
+            //             showarrow: false,
+            //             text: 'Languages',
+            //             x: 0.5,
+            //             y: 0.5
+            //         }
+            //     ]
+            // };
+
+            Plotly.newPlot('placeToPlace', chart, layout);
+
+
+        })
+</script>
+
+</body>
+</html>

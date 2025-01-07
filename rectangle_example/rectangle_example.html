@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rectangle App</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <style>
+        #container {
+            width: 800px;
+            height: 500px;
+            border: 1px solid black;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #container div {
+            display: inline-block;
+            border: 1px solid black;
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+<div id="container"></div>
+<script>
+
+    let rectangles = [];
+    let timeline;
+
+
+    function Rect(width, height, color, top, left, direction) {
+        this.width = width;
+        this.height = height;
+        this.color = color;
+        this.top = top;
+        this.left = left;
+        this.dir = direction;
+    }
+
+    var url = "https://webhook.site/692e51b4-add9-4fe5-8ca1-e6a4d0acb4b4" //Copy from https://webhook.site/ section "Your unique URL"
+    fetch(url)
+        .then(response => response.json())
+        .then(function (data) {
+            console.log(data)
+            for (var i = 0; i < data.length; i++) {
+                var rectangle1 = "<div id='rect-" + i + "' style='width: " + data[i].width + ";height: " + data[i].height + ";background: " + data[i].color + ";top: " + data[i].top + "px;left: " + data[i].left + "px;'></div>"
+                var rectangle2 = `<div id="rect-${i}" style='width: ${data[i].width};height: ${data[i].height};background: ${data[i].color};top: ${data[i].top}px;left: ${data[i].left}px;'></div>`;
+
+
+                document.getElementById("container").innerHTML += rectangle2;
+                rectangles.push(new Rect(data[i].width, data[i].height, data[i].color, data[i].top, data[i].left, data[i].dir));
+            }
+        })
+        .then(function () {
+                // Start animation after the rectangles are created
+                timeline = anime.timeline({
+                    loop: true,
+                    easing: 'easeInOutSine',
+                    autoplay: true,
+                    duration: 6000, // Total time for one cycle
+                });
+
+                console.log(rectangles);
+                for (let i = 0; i < rectangles.length; i++) {
+                    timeline.add({
+                        targets: `#rect-${i}`,
+                        translateX: (el) => {
+                            if (rectangles[i].dir === "horizontal") {
+                                const containerWidth = 800; // Width of the container
+                                const rectWidth = el.offsetWidth; // Width of the rectangle
+                                return [0, containerWidth - rectWidth]; // Move between left (0) and right edge
+                            } else {
+                                return 0;
+                            }
+                        },
+                        translateY: (el) => {
+                            if (rectangles[i].dir === "vertical") {
+                                const containerHeight = 500; // Height of the container
+                                const rectHeight = el.offsetHeight; // Height of the rectangle
+                                return [0, containerHeight - rectHeight]; // Move between top (0) and bottom edge
+                            } else {
+                                return 0;
+                            }
+                        },
+                        direction: 'alternate', // Moves back and forth
+                        duration: 6000, // Duration of one round trip
+                    }, i === 0 ? 0 : '-=6000'); // Adjust timing overlap
+                }
+            }
+        )
+
+        .catch(err => console.error("Error fetching data:", err));
+</script>
+</body>
+</html>
